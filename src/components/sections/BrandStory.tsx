@@ -18,9 +18,9 @@ export default function BrandStory() {
     <motion.section
       ref={ref}
       style={{ y }}
-      className="relative flex items-center justify-center pb-20 md:pb-32 bg-brand-red z-10"
+      className="relative bg-brand-red z-10 -mt-4"
     >
-      <div className="w-full px-6 sm:px-12 md:px-16 lg:px-24 max-w-5xl mx-auto pt-20 md:pt-32">
+      <div className="w-full px-6 sm:px-12 md:px-16 lg:px-24 max-w-5xl mx-auto py-24 md:py-32">
         <div className="space-y-12">
           <motion.h2
             className="font-display text-display-lg tracking-tight text-white max-w-2xl mx-auto text-left"
@@ -32,7 +32,10 @@ export default function BrandStory() {
             For the Bold.
           </motion.h2>
 
-          <div className="font-serif font-normal tracking-tight text-body-md leading-normal text-white/95 space-y-4 max-w-2xl mx-auto text-left">
+          <div 
+            className="font-[Inter,sans-serif] font-normal [word-spacing:0.05em] text-xl leading-relaxed text-white/95 space-y-4 max-w-2xl mx-auto text-left"
+            style={{ fontFeatureSettings: "'liga' 1, 'calt' 1" }}
+          >
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
