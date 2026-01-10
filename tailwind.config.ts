@@ -18,10 +18,11 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ["var(--font-display)", "serif"],
+        display: ["var(--font-display)", "sans-serif"],
         sans: ["var(--font-sans)", "sans-serif"],
         "sans-tight": ["var(--font-sans-tight)", "sans-serif"],
         serif: ["var(--font-serif)", "serif"],
+        caslon: ["var(--font-caslon)", "serif"],
       },
       fontSize: {
         "display-lg": ["96px", { lineHeight: "1.1" }],

@@ -2,123 +2,230 @@
 
 import Image from "next/image";
 import { motion } from 'framer-motion'
+import { useRef, useState, useEffect } from 'react'
+import ImageGalleryModal from '@/components/ImageGalleryModal'
 
 const products = [
   {
-    name: "Blue Rotterdam",
+    name: "Rotterdam Blue",
     image: "/images/products/blue-rotterdam.png",
     width: 629,
     height: 943,
+    description: "The moulded heel on this stiletto was inspired by modern architecture seen on the founder’s travels to Rotterdam. Featuring a satin upper and and Italian leather lining in a striking cobalt, these shoes are bold and statement making. ",
+    galleryImages: [
+      { src: "/images/products/blue-rotterdam.png", type: 'image' as const, alt: "Rotterdam Blue", width: 629, height: 943 },
+      { src: "/images/loader/blue-rotterdam.jpg", type: 'image' as const, alt: "Rotterdam Blue detail", width: 1200, height: 800 },
+      { src: "/images/loader/blue-rotterdam-sketch.mp4", type: 'video' as const, alt: "Rotterdam Blue sketch process" },
+    ]
   },
   {
-    name: "White Rotterdam",
+    name: "Rotterdam Pump",
     image: "/images/products/white-rotterdam.png",
     width: 415,
     height: 622,
+    description: "Carrying the Rotterdam heel, we wanted to make a shoe that was restrained but beautiful. A white leather upper meant to stand out against grey pavement, and a heel that lends it a hint of excitement.",
+    galleryImages: [
+      { src: "/images/products/white-rotterdam.png", type: 'image' as const, alt: "White Rotterdam", width: 415, height: 622 },
+      { src: "/images/loader/white-rotterdam.jpg", type: 'image' as const, alt: "White Rotterdam detail", width: 1200, height: 800 },
+      { src: "/images/loader/white-rotterdam-sketch.mp4", type: 'video' as const, alt: "White Rotterdam sketch process" },
+    ]
   },
   {
     name: "Robyn Zebra",
     image: "/images/products/robyn-zebra.png",
     width: 415,
     height: 621,
+    description: "This boot has two inspiration points, Rihanna, from A$AP Rocky’s Fashion Killa video, and a zebra coat from Dries Van Noten’s FW22 collection. The boot’s name is an ode to its first inspiration. Crafted with pony hair leather, and a contrasting red logo patch, she’s a visual and tactile stunner.",
+    galleryImages: [
+      { src: "/images/products/robyn-zebra.png", type: 'image' as const, alt: "Robyn Zebra", width: 415, height: 621 },
+      { src: "/images/loader/robyn.jpg", type: 'image' as const, alt: "Robyn detail", width: 1200, height: 800 },
+      { src: "/images/loader/robyn-boot-sketch.mp4", type: 'video' as const, alt: "Robyn boot sketch process" },
+    ]
   },
   {
-    name: "Brown Zebra",
+    name: "Robyn Brown",
     image: "/images/products/brown-zebra.png",
     width: 629,
     height: 943,
+    description: "A quieter version of its zebra twin, the silky-smooth brown leather iteration retains the red logo patch, and communicates a classic, yet exciting look.",
+    galleryImages: [
+      { src: "/images/products/brown-zebra.png", type: 'image' as const, alt: "Brown Zebra", width: 629, height: 943 },
+      { src: "/images/loader/brown-robyn.jpg", type: 'image' as const, alt: "Brown Zebra detail", width: 1200, height: 800 },
+    ]
   },
   {
-    name: "Yellow Brown",
+    name: "Yellow Brown Stiletto",
     image: "/images/products/yellow-brown.png",
     width: 415,
     height: 623,
+    description: "Shoes made for the soft life, she’s crafted with a brown suede lining for easy stepping, and grained leather straps in a beautiful yellow.",
+    galleryImages: [
+      { src: "/images/products/yellow-brown.png", type: 'image' as const, alt: "Yellow Brown", width: 415, height: 623 },
+      { src: "/images/loader/yellow-brown.jpg", type: 'image' as const, alt: "Yellow Brown detail", width: 1200, height: 800 },
+      { src: "/images/loader/yellow-brown-sketch.mp4", type: 'video' as const, alt: "Yellow Brown sketch process" },
+    ]
   },
 ];
 
 export default function ProductShowcase() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const textRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Use IntersectionObserver to track which text section is most centered in view
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    const intersectionStates = new Map<number, number>();
+
+    const updateActiveIndex = () => {
+      let maxRatio = 0;
+      let maxIndex = 0;
+      
+      intersectionStates.forEach((ratio, index) => {
+        if (ratio > maxRatio) {
+          maxRatio = ratio;
+          maxIndex = index;
+        }
+      });
+
+      if (maxRatio > 0.3) {
+        setActiveIndex(maxIndex);
+      }
+    };
+
+    textRefs.current.forEach((ref, index) => {
+      if (!ref) return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            intersectionStates.set(index, entry.intersectionRatio);
+            updateActiveIndex();
+          });
+        },
+        {
+          threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+          rootMargin: '-30% 0px -30% 0px'
+        }
+      );
+
+      observer.observe(ref);
+      observers.push(observer);
+    });
+
+    return () => {
+      observers.forEach((observer) => observer.disconnect());
+    };
+  }, []);
+
+  const activeProduct = products[activeIndex];
+
   return (
-    <section className="pt-20 md:pt-32 pb-20 md:pb-32 bg-[#FFF7ED] overflow-visible">
-      <div className="w-full px-6 sm:px-12 md:px-16 lg:px-24">
-        <div className="flex flex-col md:flex-row gap-8 md:gap-12 lg:gap-16">
-          {/* Left Column - Text */}
-          <div className="w-full md:w-1/2">
-            <div className="md:sticky md:top-24">
-              <motion.div
-                className="flex flex-col"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+    <section className="py-20 md:py-32 bg-[#fff7ed]">
+      <div className="w-full px-6 sm:px-12 md:px-16 lg:px-24 mx-auto">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
+          {/* Sticky Image Container */}
+          <div className="w-full md:w-1/2 md:sticky md:top-0 md:self-start md:h-screen py-4 md:py-8">
+            <div className="relative w-full h-full">
+              {products.map((product, index) => (
+                <motion.div
+                  key={product.name}
+                  className="absolute inset-0"
+                  initial={false}
+                  animate={{
+                    opacity: index === activeIndex ? 1 : 0,
+                    scale: index === activeIndex ? 1 : 0.95,
+                  }}
+                  transition={{
+                    duration: 0.5,
+                    ease: [0.22, 1, 0.36, 1]
+                  }}
+                >
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    width={product.width}
+                    height={product.height}
+                    className="w-full h-full object-contain"
+                  />
+                </motion.div>
+              ))}
+              
+              {/* Clickable button overlay */}
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-black/80 backdrop-blur-sm rounded-full px-4 py-3 z-10 hover:bg-black/90 transition-colors"
               >
-              <motion.h2
-                className="font-display text-display-md text-brand-red mb-3 tracking-tight"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              >
-                Crafting the unexpected
-              </motion.h2>
-              <motion.p
-                className="font-[Inter,sans-serif] font-normal [word-spacing:0.05em] text-xl leading-relaxed text-black/95"
-                style={{ fontFeatureSettings: "'liga' 1, 'calt' 1" }}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-              >
-                Each pair begins with a question: what happens when comfort, craft,
-                and curiosity are allowed to wander together?
-              </motion.p>
-              </motion.div>
+                <span className="text-white text-sm font-medium">
+                  View more images
+                </span>
+                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg
+                    className="w-4 h-4 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                </div>
+              </button>
             </div>
           </div>
 
-          {/* Right Column - Images */}
-          <div className="w-full md:w-1/2 flex flex-col gap-4 md:gap-6">
-            {products.map((product) => (
-              <div key={product.name} className="relative w-full">
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  width={product.width}
-                  height={product.height}
-                  className="w-full h-auto object-cover"
-                />
-                {/* Clickable button overlay */}
-                <button
-                  onClick={() => {
-                    // Handle click to show more image previews
-                    console.log(`View more images for ${product.name}`)
-                    // TODO: Implement image preview modal/gallery
+          {/* Scrollable Text Sections */}
+          <div className="w-full md:w-1/2 flex flex-col">
+            {/* Header */}
+            <div className="flex flex-col text-left mb-48 md:mb-56">
+              <h2 className="font-display text-display-lg tracking-tight text-brand-red font-bold">
+                Crafting the unexpected
+              </h2>
+            </div>
+
+            {products.map((product, index) => {
+              const isActive = index === activeIndex;
+              return (
+                <motion.div
+                  key={product.name}
+                  ref={(el) => {
+                    textRefs.current[index] = el;
                   }}
-                  className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-black/80 backdrop-blur-sm rounded-full px-4 py-3"
+                  className="flex flex-col gap-4 min-h-[50vh] py-8 first:pt-0 last:pb-0"
+                  initial={{ opacity: 0.4 }}
+                  animate={{
+                    opacity: isActive ? 1 : 0.4,
+                  }}
+                  transition={{
+                    duration: 0.5,
+                    ease: [0.22, 1, 0.36, 1]
+                  }}
                 >
-                  <span className="text-white text-sm font-medium">
-                    View more images
-                  </span>
-                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg
-                      className="w-4 h-4 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 4v16m8-8H4"
-                      />
-                    </svg>
-                  </div>
-                </button>
-              </div>
-            ))}
+                  <h3 className="font-display text-4xl md:text-5xl text-black tracking-tight">
+                    {product.name}
+                  </h3>
+                  <p className="font-[Inter,sans-serif] font-normal [word-spacing:0.05em] text-lg leading-relaxed text-black/90">
+                    {product.description}
+                  </p>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </div>
+
+      {/* Image Gallery Modal */}
+      <ImageGalleryModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        productName={activeProduct.name}
+        images={activeProduct.galleryImages}
+        initialIndex={0}
+      />
     </section>
   );
 }

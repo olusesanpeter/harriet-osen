@@ -3,13 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 
-const productImages = [
-  "/images/products/blue-rotterdam.png",
-  "/images/products/brown-zebra.png",
-  "/images/products/robyn-zebra.png",
-  "/images/products/white-rotterdam.png",
-  "/images/products/yellow-brown.png",
-];
+const loaderVideo = "/images/loader/blue-rotterdam-sketch.mp4";
 
 interface LoadingScreenProps {
   onLoadingComplete: () => void;
@@ -17,7 +11,6 @@ interface LoadingScreenProps {
 
 export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
   const [count, setCount] = useState(0);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
 
   const handleComplete = useCallback(() => {
@@ -47,15 +40,6 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
   }, []);
 
   useEffect(() => {
-    // Cycle through images
-    const imageInterval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % productImages.length);
-    }, 500);
-
-    return () => clearInterval(imageInterval);
-  }, []);
-
-  useEffect(() => {
     // Trigger exit when count reaches 100
     if (count === 100) {
       const exitTimer = setTimeout(() => {
@@ -72,12 +56,12 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
       }`}
     >
       {/* Header with logo and counter */}
-      <div className="w-full max-w-[420px] px-6 mb-6">
+      <div className="w-full max-w-[600px] px-6 mb-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="relative h-6 w-32">
             <Image
-              src="/images/logo/logo.png"
+              src="/images/logo/logo.svg"
               alt="Harriet Osen"
               fill
               className="object-contain object-left"
@@ -92,30 +76,22 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
         </div>
       </div>
 
-      {/* Image container */}
-      <div className="relative w-full max-w-[420px] aspect-[3/4] px-6">
-        <div className="relative w-full h-full overflow-hidden">
-          {productImages.map((src, index) => (
-            <div
-              key={src}
-              className={`absolute inset-0 transition-opacity duration-200 ${
-                index === currentImageIndex ? "opacity-100" : "opacity-0"
-              }`}
-            >
-              <Image
-                src={src}
-                alt={`Product ${index + 1}`}
-                fill
-                className="object-cover"
-                priority={index === 0}
-              />
-            </div>
-          ))}
+      {/* Video container */}
+      <div className="relative w-full max-w-[600px] px-6">
+        <div className="relative w-full">
+          <video
+            src={loaderVideo}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-auto"
+          />
         </div>
       </div>
 
       {/* Progress bar */}
-      <div className="w-full max-w-[420px] px-6 mt-8">
+      <div className="w-full max-w-[600px] px-6 mt-4">
         <div className="h-[2px] w-full bg-neutral-200 overflow-hidden">
           <div
             className="h-full bg-brand-red transition-all duration-75 ease-linear"

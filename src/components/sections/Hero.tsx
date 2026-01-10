@@ -17,7 +17,7 @@ export default function Hero() {
       <div className="absolute inset-x-0 top-0 flex justify-center pt-8 md:pt-10">
         <div className="relative w-[240px] h-[48px]">
           <Image
-            src="/images/logo/logo.png"
+            src="/images/logo/logo.svg"
             alt="Harriet Osen"
             fill
             priority

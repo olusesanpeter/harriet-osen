@@ -12,7 +12,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
   return (
-    <div className="overflow-x-hidden">
+    <>
       {isLoading && (
         <LoadingScreen onLoadingComplete={() => setIsLoading(false)} />
       )}
@@ -27,6 +27,6 @@ export default function Home() {
         <QuietArt />
         <Footer />
       </main>
-    </div>
+    </>
   );
 }
