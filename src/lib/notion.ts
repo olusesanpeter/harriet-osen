@@ -2,9 +2,44 @@
  * Notion API integration for storing feedback and newsletter data
  */
 
+/**
+ * Fetches the database schema to see available properties
+ */
+export async function getNotionDatabaseSchema() {
+  const apiKey = process.env.NOTION_API_KEY;
+  const databaseId = process.env.NOTION_DATABASE_ID;
+
+  if (!apiKey || !databaseId) {
+    throw new Error("Notion API credentials not configured");
+  }
+
+  try {
+    const response = await fetch(`https://api.notion.com/v1/databases/${databaseId}`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        "Notion-Version": "2022-06-28",
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to fetch database schema");
+    }
+
+    const data = await response.json();
+    return data.properties;
+  } catch (error) {
+    console.error("Error fetching database schema:", error);
+    throw error;
+  }
+}
+
 export interface FeedbackData {
   name: string;
   email: string;
+  country: string;
   selectedShoes: string[];
   newsletter: boolean;
 }
@@ -58,18 +93,12 @@ export async function addNewsletterToNotion(
             email: data.email,
           },
           "Selected Shoes": {
-            rich_text: [
-              {
-                text: {
-                  content: "",
-                },
-              },
-            ],
+            multi_select: [],
           },
           Newsletter: {
             checkbox: true,
           },
-          "submitted on": {
+          "Submitted On": {
             date: {
               start: new Date().toISOString(),
             },
@@ -80,9 +109,13 @@ export async function addNewsletterToNotion(
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error("Notion API error:", errorData);
+      console.error("Notion API error:", {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorData,
+      });
       throw new Error(
-        errorData.message || "Failed to add entry to Notion database"
+        errorData.message || `Notion API error: ${response.status} ${response.statusText}`
       );
     }
 
@@ -134,19 +167,18 @@ export async function addFeedbackToNotion(
           Email: {
             email: data.email,
           },
+          "Where do you live?": {
+            select: {
+              name: data.country,
+            },
+          },
           "Selected Shoes": {
-            rich_text: [
-              {
-                text: {
-                  content: data.selectedShoes.join(", "),
-                },
-              },
-            ],
+            multi_select: data.selectedShoes.map((shoe) => ({ name: shoe })),
           },
           Newsletter: {
             checkbox: data.newsletter,
           },
-          "submitted on": {
+          "Submitted On": {
             date: {
               start: new Date().toISOString(),
             },
@@ -157,9 +189,13 @@ export async function addFeedbackToNotion(
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error("Notion API error:", errorData);
+      console.error("Notion API error:", {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorData,
+      });
       throw new Error(
-        errorData.message || "Failed to add entry to Notion database"
+        errorData.message || `Notion API error: ${response.status} ${response.statusText}`
       );
     }
 

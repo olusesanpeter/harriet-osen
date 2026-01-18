@@ -3,7 +3,7 @@ import { addFeedbackToNotion } from "@/lib/notion";
 
 export async function POST(request: NextRequest) {
   try {
-    const { selectedShoes, name, email, newsletter } = await request.json();
+    const { selectedShoes, name, email, country, newsletter } = await request.json();
 
     // Validate required fields
     if (!name || !email || !email.includes("@")) {
@@ -20,20 +20,30 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!country) {
+      return NextResponse.json(
+        { success: false, message: "Please select your country" },
+        { status: 400 }
+      );
+    }
+
     // Save feedback to Notion
     try {
       await addFeedbackToNotion({
         name,
         email,
+        country,
         selectedShoes,
         newsletter: newsletter || false,
       });
     } catch (error) {
       console.error("Notion API error:", error);
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error details:", errorMessage);
       return NextResponse.json(
         {
           success: false,
-          message: "Failed to save feedback. Please try again later.",
+          message: `Failed to save feedback: ${errorMessage}. Please check the console for details.`,
         },
         { status: 500 }
       );

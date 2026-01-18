@@ -30,10 +30,25 @@ const products = [
   },
 ];
 
+const countries = [
+  "United States", "United Kingdom", "Canada", "Australia", "Germany", "France", "Italy", "Spain",
+  "Netherlands", "Belgium", "Switzerland", "Austria", "Sweden", "Norway", "Denmark", "Finland",
+  "Ireland", "Portugal", "Greece", "Poland", "Czech Republic", "Hungary", "Romania", "Bulgaria",
+  "Croatia", "Slovenia", "Slovakia", "Estonia", "Latvia", "Lithuania", "Luxembourg", "Malta",
+  "Cyprus", "Japan", "South Korea", "China", "India", "Singapore", "Hong Kong", "Taiwan",
+  "Thailand", "Malaysia", "Indonesia", "Philippines", "Vietnam", "New Zealand", "South Africa",
+  "Nigeria", "Kenya", "Ghana", "Egypt", "Morocco", "Tunisia", "Brazil", "Mexico", "Argentina",
+  "Chile", "Colombia", "Peru", "Uruguay", "Venezuela", "Ecuador", "Panama", "Costa Rica",
+  "Israel", "United Arab Emirates", "Saudi Arabia", "Qatar", "Kuwait", "Bahrain", "Oman",
+  "Turkey", "Russia", "Ukraine", "Belarus", "Georgia", "Armenia", "Azerbaijan", "Kazakhstan",
+  "Other"
+];
+
 export default function Footer() {
   const [selectedShoes, setSelectedShoes] = useState<string[]>([]);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [country, setCountry] = useState('');
   const [newsletter, setNewsletter] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
@@ -65,6 +80,7 @@ export default function Footer() {
           selectedShoes,
           name,
           email,
+          country,
           newsletter
         }),
       });
@@ -76,6 +92,7 @@ export default function Footer() {
         setSelectedShoes([]);
         setName('');
         setEmail('');
+        setCountry('');
         setNewsletter(false);
         alert('Thank you for your feedback!');
       } else {
@@ -109,7 +126,7 @@ export default function Footer() {
           </p>
           
           <form onSubmit={handleSubmit}>
-            {/* Name and Email */}
+            {/* Name, Email, and Country */}
             <div className="mb-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 w-full max-w-2xl">
                 <Input
@@ -128,6 +145,50 @@ export default function Footer() {
                   required
                   placeholder="your@email.com"
                 />
+              </div>
+              <div className="mt-4 sm:mt-6 w-full max-w-2xl">
+                <label htmlFor="country" className="mb-2 block text-sm font-medium text-foreground">
+                  Where do you live?
+                </label>
+                <div className="relative">
+                  <select
+                    id="country"
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                    required
+                    style={{
+                      WebkitAppearance: 'none',
+                      MozAppearance: 'none',
+                      appearance: 'none',
+                      backgroundImage: 'none',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'right',
+                    }}
+                    className="flex w-full rounded-md border border-foreground/20 bg-white px-4 py-3 pr-10 text-base text-black placeholder:text-black/50 focus:border-brand-red focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&::-ms-expand]:hidden"
+                  >
+                    <option value="">Select a country</option>
+                    {countries.map((countryName) => (
+                      <option key={countryName} value={countryName}>
+                        {countryName}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                    <svg
+                      className="h-5 w-5 text-black/50"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -189,7 +250,7 @@ export default function Footer() {
             <div>
               <motion.button
                 type="submit"
-                disabled={selectedShoes.length === 0 || !name || !email || isSubmitting}
+                disabled={selectedShoes.length === 0 || !name || !email || !country || isSubmitting}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="inline-flex items-center gap-3 px-8 py-4 bg-brand-red text-white font-medium rounded-full hover:bg-brand-red/90 transition-colors shadow-lg disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed"

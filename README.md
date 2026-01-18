@@ -124,9 +124,10 @@ npm run lint
 2. Create a database in Notion with the following properties:
    - **Name** (Title) - for the person's name
    - **Email** (Email) - for the email address
-   - **Selected Shoes** (Rich Text) - for the selected shoe names
+   - **Where do you live?** (Select) - for the user's country
+   - **Selected Shoes** (Multi-select) - for the selected shoe names
    - **Newsletter** (Checkbox) - for newsletter subscription preference
-   - **submitted on** (Date) - for the submission timestamp
+   - **Submitted On** (Date) - for the submission timestamp
 
 3. Share the database with your integration:
    - Open your database in Notion

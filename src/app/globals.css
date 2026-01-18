@@ -85,6 +85,18 @@ main {
     display: none;  /* Chrome, Safari and Opera */
   }
 
+  /* Hide default select arrow across all browsers */
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: none;
+  }
+  
+  select::-ms-expand {
+    display: none; /* IE and Edge */
+  }
+
   .animate-shimmer {
     animation: shimmer 2s infinite;
   }
