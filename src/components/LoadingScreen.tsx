@@ -3,7 +3,13 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 
-const loaderVideo = "/images/loader/loader.mp4";
+const loaderImages = [
+  "/images/loader/loader.png",
+  "/images/loader/loader-1.png",
+  "/images/loader/loader-2.png",
+  "/images/loader/loader-3.png",
+  "/images/loader/loader-4.png",
+];
 
 interface LoadingScreenProps {
   onLoadingComplete: () => void;
@@ -11,7 +17,10 @@ interface LoadingScreenProps {
 
 export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
   const [count, setCount] = useState(0);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [nextImageIndex, setNextImageIndex] = useState(1);
   const [isExiting, setIsExiting] = useState(false);
+  const [imageOpacity, setImageOpacity] = useState(1);
 
   const handleComplete = useCallback(() => {
     setIsExiting(true);
@@ -37,6 +46,40 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
     }, stepDuration);
 
     return () => clearInterval(countInterval);
+  }, []);
+
+  useEffect(() => {
+    // Rotate through images during loading with smooth crossfade
+    const fadeDuration = 200; // Crossfade transition duration
+    const imageInterval = 1000; // Slower rotation - 1000ms (1 second) per image
+
+    let intervalId: NodeJS.Timeout;
+
+    const rotateImage = () => {
+      // Start crossfade: fade out current, fade in next
+      setImageOpacity(0);
+      
+      // After fade completes, swap images and reset opacity
+      setTimeout(() => {
+        setCurrentImageIndex((prev) => {
+          const next = (prev + 1) % loaderImages.length;
+          setNextImageIndex((next + 1) % loaderImages.length);
+          return next;
+        });
+        setImageOpacity(1);
+      }, fadeDuration);
+    };
+
+    // Start rotation after initial delay (show first image for a bit)
+    const initialTimeout = setTimeout(() => {
+      rotateImage();
+      intervalId = setInterval(rotateImage, imageInterval);
+    }, imageInterval);
+
+    return () => {
+      clearTimeout(initialTimeout);
+      if (intervalId) clearInterval(intervalId);
+    };
   }, []);
 
   useEffect(() => {
@@ -76,16 +119,26 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
         </div>
       </div>
 
-      {/* Video container */}
+      {/* Image container */}
       <div className="relative w-full max-w-[600px] px-6">
-        <div className="relative w-full">
-          <video
-            src={loaderVideo}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-auto"
+        <div className="relative w-full aspect-square">
+          {/* Current image */}
+          <Image
+            src={loaderImages[currentImageIndex]}
+            alt="Loading"
+            fill
+            className="object-cover transition-opacity duration-200"
+            style={{ opacity: imageOpacity }}
+            priority
+          />
+          {/* Next image (for smooth crossfade) */}
+          <Image
+            src={loaderImages[nextImageIndex]}
+            alt="Loading"
+            fill
+            className="object-cover transition-opacity duration-200 absolute inset-0"
+            style={{ opacity: 1 - imageOpacity }}
+            priority
           />
         </div>
       </div>
