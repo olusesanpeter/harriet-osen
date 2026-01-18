@@ -140,12 +140,12 @@ export default function ProductShowcase() {
   const activeProduct = products[activeIndex];
 
   return (
-    <section className="py-20 md:py-32 bg-[#fff7ed]">
-      <div className="w-full px-6 sm:px-12 md:px-16 lg:px-24 mx-auto">
-        <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
+    <section id="products" className="py-12 md:py-32 bg-[#fff7ed]">
+      <div className="w-full px-4 sm:px-6 md:px-12 lg:px-24 mx-auto">
+        <div className="flex flex-col md:flex-row gap-6 md:gap-12 items-start">
           {/* Sticky Image Container */}
-          <div className="w-full md:w-1/2 md:sticky md:top-0 md:self-start md:h-screen py-4 md:py-8">
-            <div className="relative w-full h-full flex items-start justify-center">
+          <div className="w-full md:w-1/2 md:sticky md:top-0 md:self-start h-[50vh] md:h-screen py-4 md:py-8">
+            <div className="relative w-full h-full flex items-center md:items-start justify-center">
               {products.map((product, index) => (
                 <motion.div
                   key={product.name}
@@ -204,8 +204,8 @@ export default function ProductShowcase() {
           {/* Scrollable Text Sections */}
           <div className="w-full md:w-1/2 flex flex-col">
             {/* Header */}
-            <div className="flex flex-col text-left mb-48 md:mb-56 pt-16 md:pt-24">
-              <h2 className="font-display text-display-lg tracking-tight text-brand-red">
+            <div className="flex flex-col text-left mb-12 md:mb-56 pt-8 md:pt-24">
+              <h2 className="font-display text-[40px] sm:text-[60px] md:text-[80px] lg:text-display-lg tracking-tight text-brand-red">
                 Crafting the unexpected
               </h2>
             </div>
@@ -218,7 +218,7 @@ export default function ProductShowcase() {
                   ref={(el) => {
                     textRefs.current[index] = el;
                   }}
-                  className="flex flex-col gap-4 min-h-[50vh] py-8 first:pt-0 last:pb-0"
+                  className="flex flex-col gap-3 md:gap-4 min-h-[40vh] md:min-h-[50vh] py-6 md:py-8 first:pt-0 last:pb-0"
                   initial={{ opacity: 0.4 }}
                   animate={{
                     opacity: isActive ? 1 : 0.4,
@@ -228,10 +228,10 @@ export default function ProductShowcase() {
                     ease: [0.22, 1, 0.36, 1]
                   }}
                 >
-                  <h3 className="font-display text-4xl md:text-5xl text-black tracking-tight">
+                  <h3 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-black tracking-tight">
                     {product.name}
                   </h3>
-                  <p className="font-sans font-normal [word-spacing:0.05em] text-lg leading-relaxed text-black/90">
+                  <p className="font-sans font-normal [word-spacing:0.05em] text-base md:text-lg leading-relaxed text-black/90">
                     {product.description}
                   </p>
                 </motion.div>

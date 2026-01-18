@@ -4,12 +4,12 @@ import { motion } from 'framer-motion'
 
 export default function BrandStory() {
   return (
-    <section className="relative bg-brand-red"
+    <section id="brand-story" className="relative bg-brand-red"
     >
-      <div className="w-full px-6 sm:px-12 md:px-16 lg:px-24 mx-auto py-24 md:py-32 flex flex-col items-center">
+      <div className="w-full px-4 sm:px-8 md:px-16 lg:px-24 mx-auto py-16 sm:py-20 md:py-32 flex flex-col items-center">
         <div className="space-y-12 max-w-4xl text-left">
           <motion.h2
-            className="font-display text-[80px] md:text-[100px] lg:text-[120px] leading-[1.1] tracking-tight text-white [word-spacing:0.1em]"
+            className="font-display text-[40px] sm:text-[60px] md:text-[80px] lg:text-[100px] xl:text-[120px] leading-[1.1] tracking-tight text-white [word-spacing:0.1em]"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -19,7 +19,7 @@ export default function BrandStory() {
           </motion.h2>
 
           <div
-            className="font-sans font-normal [word-spacing:0.1em] text-xl leading-relaxed text-white/95 space-y-4 text-left"
+            className="font-sans font-normal [word-spacing:0.1em] text-base sm:text-lg md:text-xl leading-relaxed text-white/95 space-y-3 sm:space-y-4 text-left"
             style={{ fontFeatureSettings: "'liga' 1, 'calt' 1" }}
           >
             <motion.p
