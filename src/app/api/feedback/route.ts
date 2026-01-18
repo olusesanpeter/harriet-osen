@@ -34,6 +34,15 @@ export async function POST(request: NextRequest) {
 
       if (apiKey && formId) {
         try {
+          // Prepare custom fields for ConvertKit
+          const fields: Record<string, string> = {};
+          if (selectedShoes && selectedShoes.length > 0) {
+            // Store selected shoes as a comma-separated string
+            fields.selected_shoes = selectedShoes.join(", ");
+            // Also store as JSON for easier parsing if needed
+            fields.selected_shoes_json = JSON.stringify(selectedShoes);
+          }
+
           await fetch(
             `https://api.convertkit.com/v3/forms/${formId}/subscribe`,
             {
@@ -45,6 +54,7 @@ export async function POST(request: NextRequest) {
                 api_key: apiKey,
                 email,
                 first_name: name,
+                fields: Object.keys(fields).length > 0 ? fields : undefined,
               }),
             }
           );

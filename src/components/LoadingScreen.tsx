@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 
-const loaderVideo = "/images/loader/blue-rotterdam-sketch.mp4";
+const loaderVideo = "/images/loader/loader.mp4";
 
 interface LoadingScreenProps {
   onLoadingComplete: () => void;

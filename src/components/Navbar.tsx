@@ -64,48 +64,26 @@ export default function Navbar() {
           {/* Navigation Links */}
           <div className="flex items-center gap-3 md:gap-6">
             <a
-              href="#brand-story"
+              href="#shoes"
               className="text-[12px] md:text-[14px] text-black/70 hover:text-black transition-colors duration-200"
               style={{ letterSpacing: "-0.3px" }}
               onClick={(e) => {
                 e.preventDefault();
-                scrollToSection("brand-story");
+                scrollToSection("shoes");
               }}
             >
-              Brand Story
+              Shoes
             </a>
             <a
-              href="#products"
+              href="#our-story"
               className="text-[12px] md:text-[14px] text-black/70 hover:text-black transition-colors duration-200"
               style={{ letterSpacing: "-0.3px" }}
               onClick={(e) => {
                 e.preventDefault();
-                scrollToSection("products");
+                scrollToSection("our-story");
               }}
             >
-              Products
-            </a>
-            <a
-              href="#feedback"
-              className="text-[12px] md:text-[14px] text-black/70 hover:text-black transition-colors duration-200"
-              style={{ letterSpacing: "-0.3px" }}
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection("feedback");
-              }}
-            >
-              Feedback
-            </a>
-            <a
-              href="#quiet-art"
-              className="text-[12px] md:text-[14px] text-black/70 hover:text-black transition-colors duration-200"
-              style={{ letterSpacing: "-0.3px" }}
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection("quiet-art");
-              }}
-            >
-              Quiet Art
+              Our Story
             </a>
             <a
               href="#footer"
@@ -116,7 +94,7 @@ export default function Navbar() {
                 scrollToSection("footer");
               }}
             >
-              Contact
+              Tell us what you love
             </a>
           </div>
         </div>

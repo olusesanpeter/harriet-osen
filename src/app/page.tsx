@@ -3,9 +3,9 @@
 import { useState } from "react";
 import Hero from "@/components/sections/Hero";
 import BrandStory from "@/components/sections/BrandStory";
-import ProductShowcase from "@/components/sections/ProductShowcase";
+import Shoes from "@/components/sections/Shoes";
 import FeedbackSection from "@/components/sections/FeedbackSection";
-import QuietArt from "@/components/sections/QuietArt";
+import OurStory from "@/components/sections/OurStory";
 import Footer from "@/components/sections/Footer";
 import LoadingScreen from "@/components/LoadingScreen";
 import Navbar from "@/components/Navbar";
@@ -26,9 +26,9 @@ export default function Home() {
         <Navbar />
         <Hero />
         <BrandStory />
-        <ProductShowcase />
+        <Shoes />
         <FeedbackSection />
-        <QuietArt />
+        <OurStory />
         <Footer />
       </main>
     </>
