@@ -57,31 +57,38 @@ export default function OurStory() {
         </h2>
         
         {/* Description Section */}
-        <div className="flex flex-col text-left space-y-4">
-          <p
-            className="font-sans font-normal [word-spacing:0.05em] text-base sm:text-lg md:text-xl leading-relaxed text-white/95 max-w-[657px]"
-            style={{ fontFeatureSettings: "'liga' 1, 'calt' 1" }}
-          >
-            At Harriet Osen, we create beautiful pieces that encapsulate the ideas of identity, craft and joy.
-          </p>
-          <p
-            className="font-sans font-normal [word-spacing:0.05em] text-base sm:text-lg md:text-xl leading-relaxed text-white/95 max-w-[657px]"
-            style={{ fontFeatureSettings: "'liga' 1, 'calt' 1" }}
-          >
-            The brand was born on a warm summer evening in 2019, out of the founder&apos;s own desire to access boldly designed, unique shoes made from the best materials, that fit into wardrobes curated for bold expression.
-          </p>
-          <p
-            className="font-sans font-normal [word-spacing:0.05em] text-base sm:text-lg md:text-xl leading-relaxed text-white/95 max-w-[657px]"
-            style={{ fontFeatureSettings: "'liga' 1, 'calt' 1" }}
-          >
-            Founded by Teniola Alli, the Lagos born, London based designer spent most of her career consulting within Finance and Oil and Gas. She started working on brand development in 2021, first prototyping her designs in Hong Kong, before finally settling on skilled artisans in Portugal to bring her designs to life.
-          </p>
-          <p
-            className="font-sans font-normal [word-spacing:0.05em] text-base sm:text-lg md:text-xl leading-relaxed text-white/95 max-w-[657px]"
-            style={{ fontFeatureSettings: "'liga' 1, 'calt' 1" }}
-          >
-            Harriet Osen is named after the founder&apos;s maternal and paternal grandmothers respectively.
-          </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 text-left">
+          {/* Left Column - First 2 paragraphs */}
+          <div className="flex flex-col space-y-4">
+            <p
+              className="font-sans font-normal [word-spacing:0.05em] text-base sm:text-lg md:text-xl leading-relaxed text-white/95 max-w-[657px]"
+              style={{ fontFeatureSettings: "'liga' 1, 'calt' 1" }}
+            >
+              At Harriet Osen, we create beautiful pieces that encapsulate the ideas of identity, craft and joy.
+            </p>
+            <p
+              className="font-sans font-normal [word-spacing:0.05em] text-base sm:text-lg md:text-xl leading-relaxed text-white/95 max-w-[657px]"
+              style={{ fontFeatureSettings: "'liga' 1, 'calt' 1" }}
+            >
+              The brand was born on a warm summer evening in 2019, out of the founder&apos;s own desire to access boldly designed, unique shoes made from the best materials, that fit into wardrobes curated for bold expression.
+            </p>
+          </div>
+          
+          {/* Right Column - Last 2 paragraphs */}
+          <div className="flex flex-col space-y-4">
+            <p
+              className="font-sans font-normal [word-spacing:0.05em] text-base sm:text-lg md:text-xl leading-relaxed text-white/95 max-w-[657px]"
+              style={{ fontFeatureSettings: "'liga' 1, 'calt' 1" }}
+            >
+              Founded by Teniola Alli, the Lagos born, London based designer spent most of her career consulting within Finance and Oil and Gas. She started working on brand development in 2021, first prototyping her designs in Hong Kong, before finally settling on skilled artisans in Portugal to bring her designs to life.
+            </p>
+            <p
+              className="font-sans font-normal [word-spacing:0.05em] text-base sm:text-lg md:text-xl leading-relaxed text-white/95 max-w-[657px]"
+              style={{ fontFeatureSettings: "'liga' 1, 'calt' 1" }}
+            >
+              Harriet Osen is named after the founder&apos;s maternal and paternal grandmothers respectively.
+            </p>
+          </div>
         </div>
       </div>
 
