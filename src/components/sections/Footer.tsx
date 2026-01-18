@@ -187,9 +187,9 @@ export default function Footer() {
                 size="lg"
                 isLoading={isSubmitting}
                 disabled={selectedShoes.length === 0 || !name || !email}
-                className="bg-brand-red hover:bg-brand-red/90 text-white"
+                className="bg-brand-red hover:bg-brand-red/90 text-white rounded-none w-full"
               >
-                Submit Feedback
+                Submit
               </Button>
             </div>
           </form>
