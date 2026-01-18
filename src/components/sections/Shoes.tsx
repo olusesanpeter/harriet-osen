@@ -241,9 +241,6 @@ export default function Shoes() {
                 >
                   <h3 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-black tracking-tight">
                     {product.name}
-                    {isSelected && !isMostRecent && (
-                      <span className="ml-2 text-sm text-black/60">(selected)</span>
-                    )}
                   </h3>
                   <p className="font-sans font-normal [word-spacing:0.05em] text-base md:text-lg leading-relaxed text-black/90">
                     {product.description}
