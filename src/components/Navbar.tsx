@@ -94,7 +94,7 @@ export default function Navbar() {
                 scrollToSection("footer");
               }}
             >
-              Tell us what you love
+              Tell us what you love<sup className="text-[0.6em]">♥</sup>
             </a>
           </div>
         </div>

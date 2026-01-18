@@ -102,7 +102,7 @@ export default function Footer() {
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
           <h2 className="font-display text-[40px] sm:text-[60px] md:text-[80px] lg:text-[100px] xl:text-[120px] leading-[1.1] tracking-tight text-brand-red pt-8 md:pt-12 mb-6 text-left">
-            Tell us what you love
+            Tell us what you love<sup className="text-[0.6em]">♥</sup>
           </h2>
           <p className="font-sans font-normal [word-spacing:0.05em] text-base sm:text-lg md:text-xl leading-relaxed text-black/90 mb-6 sm:mb-8 text-left">
             We&apos;d love to know which designs speak to you. Share your favorites and be the first to know when they&apos;re available.

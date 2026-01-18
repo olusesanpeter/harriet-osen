@@ -21,7 +21,7 @@ export default function FeedbackSection() {
           className="max-w-2xl mx-auto text-center"
         >
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-brand-red mb-4">
-            Tell us what you love
+            Tell us what you love<sup className="text-[0.6em]">♥</sup>
           </h2>
           <p className="text-black/70 text-base sm:text-lg mb-8">
             We&apos;d love to know which designs speak to you. Share your favorites and be the first to know when they&apos;re available.
