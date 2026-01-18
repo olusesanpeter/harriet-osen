@@ -17,7 +17,6 @@ const products = [
       { src: "/images/products/blue-rotterdam/blue-rotterdam-side.jpg", type: 'image' as const, alt: "Rotterdam Blue side", width: 1200, height: 1800 },
       { src: "/images/products/blue-rotterdam/blue-rotterdam-heel.jpg", type: 'image' as const, alt: "Rotterdam Blue heel", width: 1200, height: 1800 },
       { src: "/images/loader/blue-rotterdam.jpg", type: 'image' as const, alt: "Rotterdam Blue detail", width: 1200, height: 800 },
-      { src: "/images/loader/blue-rotterdam-sketch.mp4", type: 'video' as const, alt: "Rotterdam Blue sketch process" },
     ]
   },
   {
@@ -31,7 +30,6 @@ const products = [
       { src: "/images/products/white-rotterdam/white-rotterdam-side.jpg", type: 'image' as const, alt: "White Rotterdam side", width: 1200, height: 1800 },
       { src: "/images/products/white-rotterdam/white-rotterdam-heel.jpg", type: 'image' as const, alt: "White Rotterdam heel", width: 1200, height: 1800 },
       { src: "/images/loader/white-rotterdam.jpg", type: 'image' as const, alt: "White Rotterdam detail", width: 1200, height: 800 },
-      { src: "/images/loader/white-rotterdam-sketch.mp4", type: 'video' as const, alt: "White Rotterdam sketch process" },
     ]
   },
   {
@@ -45,16 +43,8 @@ const products = [
       { src: "/images/products/brown-zebra/robyn-zebra-side.jpg", type: 'image' as const, alt: "Robyn Zebra side", width: 1200, height: 1800 },
       { src: "/images/products/brown-zebra/robyn-zebra-patch.jpg", type: 'image' as const, alt: "Robyn Zebra patch", width: 1200, height: 1800 },
       { src: "/images/products/robyn-zebra-alt-1.png", type: 'image' as const, alt: "Robyn Zebra", width: 1200, height: 1800 },
-      { src: "/images/products/robyn-zebra-alt-2.png", type: 'image' as const, alt: "Robyn Zebra", width: 1200, height: 1800 },
-      { src: "/images/products/robyn-zebra-alt-3.png", type: 'image' as const, alt: "Robyn Zebra", width: 1200, height: 1800 },
       { src: "/images/products/lifestyle/robyn-zebra-lifestyle-1.jpg", type: 'image' as const, alt: "Robyn Zebra lifestyle", width: 1200, height: 1800 },
       { src: "/images/products/lifestyle/robyn-zebra-lifestyle-2.jpg", type: 'image' as const, alt: "Robyn Zebra lifestyle", width: 1200, height: 1800 },
-      { src: "/images/products/lifestyle/robyn-zebra-lifestyle-3.jpg", type: 'image' as const, alt: "Robyn Zebra lifestyle", width: 1200, height: 1800 },
-      { src: "/images/products/lifestyle/robyn-zebra-lifestyle-4.jpg", type: 'image' as const, alt: "Robyn Zebra lifestyle", width: 1200, height: 1800 },
-      { src: "/images/products/lifestyle/robyn-zebra-lifestyle-5.jpg", type: 'image' as const, alt: "Robyn Zebra lifestyle", width: 1200, height: 1800 },
-      { src: "/images/products/lifestyle/robyn-zebra-lifestyle-6.jpg", type: 'image' as const, alt: "Robyn Zebra lifestyle", width: 1200, height: 1800 },
-      { src: "/images/products/lifestyle/robyn-zebra-lifestyle-7.jpg", type: 'image' as const, alt: "Robyn Zebra lifestyle", width: 1200, height: 1800 },
-      { src: "/images/loader/robyn.jpg", type: 'image' as const, alt: "Robyn detail", width: 1200, height: 800 },
       { src: "/images/loader/robyn-boot-sketch.mp4", type: 'video' as const, alt: "Robyn boot sketch process" },
     ]
   },
