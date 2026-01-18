@@ -44,7 +44,6 @@ const products = [
       { src: "/images/products/brown-zebra/robyn-zebra-patch.jpg", type: 'image' as const, alt: "Robyn Zebra patch", width: 1200, height: 1800 },
       { src: "/images/products/robyn-zebra-alt-1.png", type: 'image' as const, alt: "Robyn Zebra", width: 1200, height: 1800 },
       { src: "/images/products/lifestyle/robyn-zebra-lifestyle-1.jpg", type: 'image' as const, alt: "Robyn Zebra lifestyle", width: 1200, height: 1800 },
-      { src: "/images/products/lifestyle/robyn-zebra-lifestyle-2.jpg", type: 'image' as const, alt: "Robyn Zebra lifestyle", width: 1200, height: 1800 },
       { src: "/images/loader/robyn-boot-sketch.mp4", type: 'video' as const, alt: "Robyn boot sketch process" },
     ]
   },

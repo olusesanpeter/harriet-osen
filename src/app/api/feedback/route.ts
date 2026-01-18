@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { addFeedbackToNotion } from "@/lib/notion";
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,50 +20,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // TODO: Save feedback to your database or send to your email service
-    console.log("Feedback received:", {
-      selectedShoes,
-      name,
-      email,
-      newsletter,
-    });
-
-    // If newsletter is checked, subscribe via ConvertKit
-    if (newsletter) {
-      const apiKey = process.env.CONVERTKIT_API_KEY;
-      const formId = process.env.CONVERTKIT_FORM_ID;
-
-      if (apiKey && formId) {
-        try {
-          // Prepare custom fields for ConvertKit
-          const fields: Record<string, string> = {};
-          if (selectedShoes && selectedShoes.length > 0) {
-            // Store selected shoes as a comma-separated string
-            fields.selected_shoes = selectedShoes.join(", ");
-            // Also store as JSON for easier parsing if needed
-            fields.selected_shoes_json = JSON.stringify(selectedShoes);
-          }
-
-          await fetch(
-            `https://api.convertkit.com/v3/forms/${formId}/subscribe`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                api_key: apiKey,
-                email,
-                first_name: name,
-                fields: Object.keys(fields).length > 0 ? fields : undefined,
-              }),
-            }
-          );
-        } catch (error) {
-          console.error("ConvertKit subscription error:", error);
-          // Don't fail the whole request if newsletter subscription fails
-        }
-      }
+    // Save feedback to Notion
+    try {
+      await addFeedbackToNotion({
+        name,
+        email,
+        selectedShoes,
+        newsletter: newsletter || false,
+      });
+    } catch (error) {
+      console.error("Notion API error:", error);
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Failed to save feedback. Please try again later.",
+        },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { subscribeToNewsletter } from "@/lib/convertkit";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { cn } from "@/lib/utils";
@@ -19,7 +18,20 @@ export default function NewsletterForm() {
     setMessage("");
 
     try {
-      const result = await subscribeToNewsletter({ email });
+      const response = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to subscribe");
+      }
+
       setStatus("success");
       setMessage(result.message || "Thanks for subscribing!");
       setEmail("");

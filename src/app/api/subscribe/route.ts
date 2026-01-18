@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { addNewsletterToNotion } from "@/lib/notion";
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,41 +13,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get ConvertKit credentials from environment
-    const apiKey = process.env.CONVERTKIT_API_KEY;
-    const formId = process.env.CONVERTKIT_FORM_ID;
-
-    if (!apiKey || !formId) {
-      console.error("ConvertKit API credentials not configured");
+    // Save newsletter subscription to Notion
+    try {
+      await addNewsletterToNotion({
+        email,
+        firstName,
+      });
+    } catch (error) {
+      console.error("Notion API error:", error);
       return NextResponse.json(
         {
           success: false,
-          message: "Newsletter service is not configured. Please try again later.",
+          message: "Failed to subscribe. Please try again later.",
         },
         { status: 500 }
       );
-    }
-
-    // Call ConvertKit API
-    const response = await fetch(
-      `https://api.convertkit.com/v3/forms/${formId}/subscribe`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          api_key: apiKey,
-          email,
-          first_name: firstName,
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("ConvertKit API error:", errorData);
-      throw new Error("ConvertKit API error");
     }
 
     return NextResponse.json({

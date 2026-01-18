@@ -5,7 +5,8 @@ Premium fashion footwear website built with Next.js, TypeScript, and Tailwind CS
 ## Features
 
 - Modern, responsive landing page design
-- Newsletter subscription with ConvertKit integration
+- Newsletter subscription with Notion integration
+- Feedback form with Notion integration
 - SEO optimized with comprehensive meta tags
 - Server-side rendering with Next.js 15 App Router
 - Type-safe development with TypeScript
@@ -20,14 +21,14 @@ Premium fashion footwear website built with Next.js, TypeScript, and Tailwind CS
 - **Icons**: Lucide React
 - **Animation**: Framer Motion
 - **Deployment**: Vercel
-- **Mailing List**: ConvertKit
+- **Data Storage**: Notion
 
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js 18+ and npm
-- ConvertKit account (for newsletter functionality)
+- Notion account (for storing newsletter subscriptions and feedback)
 
 ### Installation
 
@@ -40,11 +41,11 @@ npm install
 
 3. Set up environment variables:
 
-Copy `.env.example` to `.env.local` and fill in your ConvertKit credentials:
+Copy `.env.example` to `.env.local` and fill in your credentials:
 
 ```env
-CONVERTKIT_API_KEY=your_api_key_here
-CONVERTKIT_FORM_ID=your_form_id_here
+NOTION_API_KEY=your_notion_api_key_here
+NOTION_DATABASE_ID=your_notion_database_id_here
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_SITE_NAME=Harriet Osen
 ```
@@ -79,7 +80,8 @@ npm run lint
 ├── src/
 │   ├── app/                    # Next.js App Router pages
 │   │   ├── api/               # API routes
-│   │   │   └── subscribe/     # Newsletter subscription endpoint
+│   │   │   ├── subscribe/    # Newsletter subscription endpoint
+│   │   │   └── feedback/      # Feedback form endpoint
 │   │   ├── layout.tsx         # Root layout with SEO
 │   │   ├── page.tsx           # Landing page
 │   │   ├── globals.css        # Global styles
@@ -101,7 +103,7 @@ npm run lint
 │   │       └── NewsletterForm.tsx
 │   ├── lib/
 │   │   ├── utils.ts           # Utility functions
-│   │   └── convertkit.ts      # ConvertKit client
+│   │   └── notion.ts          # Notion API client
 │   ├── config/
 │   │   └── site.ts            # Site configuration
 │   └── types/
@@ -110,13 +112,33 @@ npm run lint
 └── .claude/                   # Claude Code configuration
 ```
 
-## ConvertKit Setup
+## Notion Setup
 
-1. Create a ConvertKit account at [convertkit.com](https://convertkit.com)
-2. Create a new form in your ConvertKit dashboard
-3. Get your API key from Settings → Advanced
-4. Get your Form ID from the form you created
-5. Add both to your `.env.local` file
+1. Create a Notion integration:
+   - Go to [notion.so/my-integrations](https://www.notion.so/my-integrations)
+   - Click "New integration"
+   - Give it a name (e.g., "Harriet Osen Feedback")
+   - Select your workspace
+   - Copy the "Internal Integration Token" (this is your `NOTION_API_KEY`)
+
+2. Create a database in Notion with the following properties:
+   - **Name** (Title) - for the person's name
+   - **Email** (Email) - for the email address
+   - **Selected Shoes** (Rich Text) - for the selected shoe names
+   - **Newsletter** (Checkbox) - for newsletter subscription preference
+   - **Submitted At** (Date) - for the submission timestamp
+
+3. Share the database with your integration:
+   - Open your database in Notion
+   - Click the "..." menu in the top right
+   - Click "Add connections"
+   - Select your integration
+
+4. Get your Database ID:
+   - Open your database in Notion
+   - Copy the URL (it will look like: `https://www.notion.so/workspace/DATABASE_ID?v=...`)
+   - The Database ID is the 32-character string after the last `/` and before the `?`
+   - Add it to your `.env.local` file as `NOTION_DATABASE_ID`
 
 ## Deployment
 
@@ -125,8 +147,8 @@ npm run lint
 1. Push your code to GitHub
 2. Import the project in [Vercel](https://vercel.com)
 3. Configure environment variables in Vercel project settings:
-   - `CONVERTKIT_API_KEY`
-   - `CONVERTKIT_FORM_ID`
+   - `NOTION_API_KEY`
+   - `NOTION_DATABASE_ID`
    - `NEXT_PUBLIC_SITE_URL` (your production URL)
    - `NEXT_PUBLIC_SITE_NAME`
 4. Deploy!

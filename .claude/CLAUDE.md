@@ -10,7 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Tailwind CSS
 - Framer Motion for animations
 - Lucide React for icons
-- ConvertKit for mailing list
+- Notion for data storage (newsletter subscriptions and feedback)
 - Vercel for deployment
 
 ## Development Commands
@@ -50,11 +50,20 @@ Libre Caslon Condensed is loaded from `src/fonts/` directory (Regular and Bold w
 ### Newsletter Integration
 Newsletter subscription flow:
 1. Client: `NewsletterForm` (form component with validation)
-2. Client: `lib/convertkit.ts` (`subscribeToNewsletter` function makes API call)
-3. Server: `app/api/subscribe/route.ts` (API route handler)
-4. External: ConvertKit API
+2. Server: `app/api/subscribe/route.ts` (API route handler)
+3. Server: `lib/notion.ts` (`addNewsletterToNotion` function)
+4. External: Notion API
 
-The API route validates email, checks for required env vars (`CONVERTKIT_API_KEY`, `CONVERTKIT_FORM_ID`), and calls ConvertKit's form subscription endpoint.
+The API route validates email and saves the subscription to Notion using the Notion API.
+
+### Feedback Integration
+Feedback form flow:
+1. Client: `Footer` component (form with shoe selection)
+2. Server: `app/api/feedback/route.ts` (API route handler)
+3. Server: `lib/notion.ts` (`addFeedbackToNotion` function)
+4. External: Notion API
+
+The API route validates form data and saves feedback entries to Notion.
 
 ### Configuration
 - `src/config/site.ts`: Centralized site metadata (name, description, keywords, social links, OG image)
@@ -68,10 +77,10 @@ The API route validates email, checks for required env vars (`CONVERTKIT_API_KEY
 
 ## Environment Variables
 
-Required for ConvertKit integration:
+Required for Notion integration:
 ```env
-CONVERTKIT_API_KEY=      # From ConvertKit Settings → Advanced
-CONVERTKIT_FORM_ID=      # From your ConvertKit form
+NOTION_API_KEY=          # From Notion integration settings
+NOTION_DATABASE_ID=      # From your Notion database URL
 NEXT_PUBLIC_SITE_URL=    # Production URL (http://localhost:3000 for dev)
 NEXT_PUBLIC_SITE_NAME=   # Site name (Harriet Osen)
 ```
@@ -102,5 +111,6 @@ When Figma links are shared, use the Figma MCP server to:
 - `src/config/site.ts`: Site metadata and configuration
 - `src/app/layout.tsx`: Root layout with fonts and SEO
 - `tailwind.config.ts`: Brand colors, custom fonts, and design tokens
-- `src/lib/convertkit.ts`: ConvertKit client function
+- `src/lib/notion.ts`: Notion API client functions
 - `src/app/api/subscribe/route.ts`: Newsletter subscription endpoint
+- `src/app/api/feedback/route.ts`: Feedback form endpoint
