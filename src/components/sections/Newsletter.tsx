@@ -6,7 +6,7 @@ export default function Newsletter() {
     <section className="pb-20 md:pb-32 bg-foreground/5">
       <Container size="md">
         <div className="text-center">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-4">
+          <h2 className="font-display text-3xl tracking-tight sm:text-4xl md:text-5xl mb-4">
             Stay in the Loop
           </h2>
           <p className="text-lg text-foreground/80 mb-8 max-w-2xl mx-auto">

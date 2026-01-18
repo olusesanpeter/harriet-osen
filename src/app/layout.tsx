@@ -1,25 +1,44 @@
 import type { Metadata } from "next";
-import { Inter, Inter_Tight, Instrument_Serif } from "next/font/google";
+import { Instrument_Serif } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { siteConfig } from "@/config/site";
+import SmoothScroll from "@/components/SmoothScroll";
 
-const inter = Inter({
-  subsets: ["latin"],
+const graphik = localFont({
+  src: [
+    {
+      path: "../../public/fonts/graphik/web/Graphik-Light.woff",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/graphik/web/Graphik-Regular.woff",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/graphik/web/Graphik-Medium.woff",
+      weight: "500",
+      style: "normal",
+    },
+  ],
   variable: "--font-sans",
   display: "swap",
+  fallback: ["sans-serif"],
 });
 
-const interTight = Inter_Tight({
-  subsets: ["latin"],
-  variable: "--font-sans-tight",
-  display: "swap",
-});
-
-const interTightDisplay = Inter_Tight({
-  subsets: ["latin"],
+const canela = localFont({
+  src: [
+    {
+      path: "../../public/fonts/canela/Canela-Light.woff2",
+      weight: "300",
+      style: "normal",
+    },
+  ],
   variable: "--font-display",
   display: "swap",
+  fallback: ["serif"],
 });
 
 const instrumentSerif = Instrument_Serif({
@@ -91,8 +110,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${interTight.variable} ${interTightDisplay.variable} ${instrumentSerif.variable} ${libreCaslon.variable}`}>
+    <html lang="en" className={`${graphik.variable} ${canela.variable} ${instrumentSerif.variable} ${libreCaslon.variable}`}>
       <body className="font-sans antialiased">
+        <SmoothScroll />
         {children}
       </body>
     </html>

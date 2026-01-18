@@ -6,10 +6,10 @@ export default function BrandStory() {
   return (
     <section className="relative bg-brand-red"
     >
-      <div className="w-full px-6 sm:px-12 md:px-16 lg:px-24 mx-auto py-24 md:py-32">
-        <div className="space-y-12">
+      <div className="w-full px-6 sm:px-12 md:px-16 lg:px-24 mx-auto py-24 md:py-32 flex flex-col items-center">
+        <div className="space-y-12 max-w-4xl text-left">
           <motion.h2
-            className="font-display text-[180px] leading-[1.1] tracking-tight text-white w-full text-left font-bold"
+            className="font-display text-[80px] md:text-[100px] lg:text-[120px] leading-[1.1] tracking-tight text-white [word-spacing:0.1em]"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -19,7 +19,7 @@ export default function BrandStory() {
           </motion.h2>
 
           <div
-            className="font-[Inter,sans-serif] font-normal [word-spacing:0.05em] text-xl leading-relaxed text-white/95 space-y-4 max-w-6xl text-left"
+            className="font-sans font-normal [word-spacing:0.1em] text-xl leading-relaxed text-white/95 space-y-4 text-left"
             style={{ fontFeatureSettings: "'liga' 1, 'calt' 1" }}
           >
             <motion.p

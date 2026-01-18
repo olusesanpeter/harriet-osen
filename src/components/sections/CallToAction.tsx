@@ -6,7 +6,7 @@ export default function CallToAction() {
     <section className="py-20 md:py-32 bg-background">
       <Container size="md">
         <div className="rounded-2xl bg-foreground text-background p-12 md:p-16 text-center">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-6">
+          <h2 className="font-display text-3xl tracking-tight sm:text-4xl md:text-5xl mb-6">
             Ready to Step Up Your Style?
           </h2>
           <p className="text-lg md:text-xl mb-8 text-background/90 max-w-2xl mx-auto">

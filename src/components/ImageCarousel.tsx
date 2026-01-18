@@ -27,7 +27,7 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
 
     const maxSpeed = speed;
     const isMobile = window.innerWidth < 768;
-    const itemWidth = (isMobile ? 200 : 300) + 20; // gap of 20px
+    const itemWidth = (isMobile ? 300 : 450) + 20; // gap of 20px
     const totalItems = images.length;
     const resetPoint = itemWidth * totalItems;
 
@@ -63,7 +63,7 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
         {images.map((image, index) => (
           <motion.div
             key={`first-${index}`}
-            className="flex-shrink-0 w-[200px] md:w-[300px]"
+            className="flex-shrink-0 w-[300px] md:w-[450px]"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{
@@ -78,7 +78,7 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
                 alt={image.name}
                 fill
                 className="object-cover pointer-events-none"
-                sizes="(max-width: 768px) 200px, 300px"
+                sizes="(max-width: 768px) 300px, 450px"
               />
             </div>
           </motion.div>
@@ -87,7 +87,7 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
         {images.map((image, index) => (
           <motion.div
             key={`second-${index}`}
-            className="flex-shrink-0 w-[200px] md:w-[300px]"
+            className="flex-shrink-0 w-[300px] md:w-[450px]"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{
@@ -102,7 +102,7 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
                 alt={image.name}
                 fill
                 className="object-cover pointer-events-none"
-                sizes="(max-width: 768px) 200px, 300px"
+                sizes="(max-width: 768px) 300px, 450px"
               />
             </div>
           </motion.div>

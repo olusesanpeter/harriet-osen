@@ -33,7 +33,7 @@ export default function Features() {
     <section className="py-20 md:py-32 bg-background">
       <Container size="lg">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-4">
+          <h2 className="font-display text-3xl tracking-tight sm:text-4xl md:text-5xl mb-4">
             Why Choose Harriet Osen
           </h2>
           <p className="text-lg text-foreground/80 max-w-2xl mx-auto">

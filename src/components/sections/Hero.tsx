@@ -13,9 +13,9 @@ export default function Hero() {
         className="object-cover object-center"
       />
 
-      {/* Logo overlay - top center */}
-      <div className="absolute inset-x-0 top-0 flex justify-center pt-8 md:pt-10">
-        <div className="relative w-[240px] h-[48px]">
+      {/* Logo overlay - center */}
+      <div className="absolute inset-0 flex items-end justify-center">
+        <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] -mb-8 md:-mb-12">
           <Image
             src="/images/logo/logo.svg"
             alt="Harriet Osen"
