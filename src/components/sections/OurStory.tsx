@@ -68,7 +68,7 @@ export default function OurStory() {
             className="font-sans font-normal [word-spacing:0.05em] text-base sm:text-lg md:text-xl leading-relaxed text-white/95 max-w-[657px]"
             style={{ fontFeatureSettings: "'liga' 1, 'calt' 1" }}
           >
-            The brand was born on a warm summer evening in 2019, out of the founder's own desire to access boldly designed, unique shoes made from the best materials, that fit into wardrobes curated for bold expression.
+            The brand was born on a warm summer evening in 2019, out of the founder&apos;s own desire to access boldly designed, unique shoes made from the best materials, that fit into wardrobes curated for bold expression.
           </p>
           <p
             className="font-sans font-normal [word-spacing:0.05em] text-base sm:text-lg md:text-xl leading-relaxed text-white/95 max-w-[657px]"
@@ -80,7 +80,7 @@ export default function OurStory() {
             className="font-sans font-normal [word-spacing:0.05em] text-base sm:text-lg md:text-xl leading-relaxed text-white/95 max-w-[657px]"
             style={{ fontFeatureSettings: "'liga' 1, 'calt' 1" }}
           >
-            Harriet Osen is named after the founder's maternal and paternal grandmothers respectively.
+            Harriet Osen is named after the founder&apos;s maternal and paternal grandmothers respectively.
           </p>
           <div className="flex flex-col sm:flex-row sm:gap-8 text-white/95 font-sans text-base sm:text-lg md:text-xl pt-2">
             <span>Harriet - strength - 1923</span>
