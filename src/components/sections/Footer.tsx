@@ -99,7 +99,7 @@ export default function Footer() {
             Tell us what you like
           </h2>
           <p className="font-sans font-normal [word-spacing:0.05em] text-xl leading-relaxed text-black/90 mb-8 text-left">
-            We're beginning production soon and would love to hear which designs resonate with you.
+            We&apos;re beginning production soon and would love to hear which designs resonate with you.
           </p>
           
           <form onSubmit={handleSubmit}>

@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 interface ImageItem {
   src: string
@@ -27,6 +27,19 @@ export default function ImageGalleryModal({
   images,
   initialIndex = 0,
 }: ImageGalleryModalProps) {
+  const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set())
+
+  // Reset loaded images when modal opens/closes or images change
+  useEffect(() => {
+    if (isOpen) {
+      setLoadedImages(new Set())
+    }
+  }, [isOpen, images])
+
+  const handleImageLoad = (index: number) => {
+    setLoadedImages((prev) => new Set(prev).add(index))
+  }
+
   // Handle keyboard navigation
   useEffect(() => {
     if (!isOpen) return
@@ -54,6 +67,13 @@ export default function ImageGalleryModal({
   }, [isOpen])
 
   if (!images.length) return null
+
+  // Skeleton Loader Component
+  const SkeletonLoader = () => (
+    <div className="absolute inset-0 bg-gray-200 overflow-hidden">
+      <div className="w-full h-full bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer bg-[length:200%_100%]" />
+    </div>
+  )
 
   return (
     <AnimatePresence>
@@ -110,33 +130,39 @@ export default function ImageGalleryModal({
               {/* All Images Side by Side */}
               <div className="relative w-full bg-white rounded-lg overflow-x-auto overflow-y-hidden">
                 <div className="flex gap-4 h-[85vh] items-center py-4">
-                  {images.map((image, index) => (
-                    <div
-                      key={index}
-                      className="relative flex-shrink-0 h-full"
-                      style={{ aspectRatio: image.width && image.height ? `${image.width}/${image.height}` : '2/3' }}
-                    >
-                      {image.type === 'video' ? (
-                        <video
-                          src={image.src}
-                          className="w-full h-full object-contain"
-                          autoPlay
-                          loop
-                          muted
-                          playsInline
-                        />
-                      ) : (
-                        <Image
-                          src={image.src}
-                          alt={image.alt}
-                          width={image.width || 1200}
-                          height={image.height || 1800}
-                          className="w-full h-full object-contain"
-                          priority={index === initialIndex}
-                        />
-                      )}
-                    </div>
-                  ))}
+                  {images.map((image, index) => {
+                    const isLoaded = loadedImages.has(index)
+                    return (
+                      <div
+                        key={index}
+                        className="relative flex-shrink-0 h-full"
+                        style={{ aspectRatio: image.width && image.height ? `${image.width}/${image.height}` : '2/3' }}
+                      >
+                        {!isLoaded && <SkeletonLoader />}
+                        {image.type === 'video' ? (
+                          <video
+                            src={image.src}
+                            className={`w-full h-full object-contain ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            onLoadedData={() => handleImageLoad(index)}
+                          />
+                        ) : (
+                          <Image
+                            src={image.src}
+                            alt={image.alt}
+                            width={image.width || 1200}
+                            height={image.height || 1800}
+                            className={`w-full h-full object-contain ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+                            priority={index === initialIndex}
+                            onLoad={() => handleImageLoad(index)}
+                          />
+                        )}
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             </motion.div>

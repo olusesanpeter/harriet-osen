@@ -61,6 +61,15 @@ main {
   background: #D61C27; /* brand-red to prevent white gaps between sections */
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -74,5 +83,9 @@ main {
   
   .scrollbar-hide::-webkit-scrollbar {
     display: none;  /* Chrome, Safari and Opera */
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
   }
 }
