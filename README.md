@@ -126,7 +126,7 @@ npm run lint
    - **Email** (Email) - for the email address
    - **Selected Shoes** (Rich Text) - for the selected shoe names
    - **Newsletter** (Checkbox) - for newsletter subscription preference
-   - **Submitted At** (Date) - for the submission timestamp
+   - **submitted on** (Date) - for the submission timestamp
 
 3. Share the database with your integration:
    - Open your database in Notion

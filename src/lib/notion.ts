@@ -69,7 +69,7 @@ export async function addNewsletterToNotion(
           Newsletter: {
             checkbox: true,
           },
-          "Submitted At": {
+          "submitted on": {
             date: {
               start: new Date().toISOString(),
             },
@@ -146,7 +146,7 @@ export async function addFeedbackToNotion(
           Newsletter: {
             checkbox: data.newsletter,
           },
-          "Submitted At": {
+          "submitted on": {
             date: {
               start: new Date().toISOString(),
             },

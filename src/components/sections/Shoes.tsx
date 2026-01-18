@@ -76,28 +76,43 @@ const products = [
 ];
 
 export default function Shoes() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [selectedIndices, setSelectedIndices] = useState<Set<number>>(new Set([0]));
+  const [mostRecentActiveIndex, setMostRecentActiveIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const textRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Use IntersectionObserver to track which text section is most centered in view
+  // Use IntersectionObserver to track which text sections are in view and add them to selection
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
     const intersectionStates = new Map<number, number>();
 
-    const updateActiveIndex = () => {
+    const updateSelectedIndices = () => {
+      const newSelectedIndices = new Set<number>();
       let maxRatio = 0;
       let maxIndex = 0;
       
       intersectionStates.forEach((ratio, index) => {
+        // Add to selection if intersection ratio is above threshold
+        if (ratio > 0.3) {
+          newSelectedIndices.add(index);
+        }
+        // Track the most recent active index for modal display
         if (ratio > maxRatio) {
           maxRatio = ratio;
           maxIndex = index;
         }
       });
 
+      // Update selected indices
+      setSelectedIndices((prev) => {
+        const updated = new Set(prev);
+        newSelectedIndices.forEach((index) => updated.add(index));
+        return updated;
+      });
+
+      // Update most recent active index for modal
       if (maxRatio > 0.3) {
-        setActiveIndex(maxIndex);
+        setMostRecentActiveIndex(maxIndex);
       }
     };
 
@@ -108,7 +123,7 @@ export default function Shoes() {
         (entries) => {
           entries.forEach((entry) => {
             intersectionStates.set(index, entry.intersectionRatio);
-            updateActiveIndex();
+            updateSelectedIndices();
           });
         },
         {
@@ -126,7 +141,7 @@ export default function Shoes() {
     };
   }, []);
 
-  const activeProduct = products[activeIndex];
+  const activeProduct = products[mostRecentActiveIndex];
 
   return (
     <section id="shoes" className="py-12 md:py-32 bg-[#fff7ed]">
@@ -135,58 +150,64 @@ export default function Shoes() {
           {/* Sticky Image Container */}
           <div className="w-full md:w-1/2 md:sticky md:top-0 md:self-start h-[50vh] md:h-screen py-4 md:py-8">
             <div className="relative w-full h-full flex items-center md:items-start justify-center">
-              {products.map((product, index) => (
-                <motion.div
-                  key={product.name}
-                  className="absolute inset-0 flex items-start justify-center"
-                  initial={false}
-                  animate={{
-                    opacity: index === activeIndex ? 1 : 0,
-                  }}
-                  transition={{
-                    duration: 0.5,
-                    ease: [0.22, 1, 0.36, 1]
-                  }}
-                >
-                  <div className="relative w-full h-full flex items-center justify-center">
-                    <div className="relative w-full h-full max-w-[600px] max-h-[90vh] flex items-center justify-center">
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        width={product.width}
-                        height={product.height}
-                        className="w-full h-full object-contain"
-                      />
-                      {/* Clickable button overlay - positioned within the image */}
-                      {index === activeIndex && (
-                        <button
-                          onClick={() => setIsModalOpen(true)}
-                          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-black/80 backdrop-blur-sm rounded-full px-4 py-3 z-10 hover:bg-black/90 transition-colors shadow-lg"
-                        >
-                          <span className="text-white text-sm font-medium">
-                            View more images
-                          </span>
-                          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                            <svg
-                              className="w-4 h-4 text-white"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M12 4v16m8-8H4"
-                              />
-                            </svg>
-                          </div>
-                        </button>
-                      )}
+              {products.map((product, index) => {
+                const isSelected = selectedIndices.has(index);
+                const isMostRecent = index === mostRecentActiveIndex;
+                return (
+                  <motion.div
+                    key={product.name}
+                    className="absolute inset-0 flex items-start justify-center"
+                    initial={false}
+                    animate={{
+                      opacity: isSelected ? (isMostRecent ? 1 : 0.6) : 0,
+                      scale: isSelected ? (isMostRecent ? 1 : 0.9) : 0.8,
+                      zIndex: isMostRecent ? 10 : (isSelected ? 5 : 1),
+                    }}
+                    transition={{
+                      duration: 0.5,
+                      ease: [0.22, 1, 0.36, 1]
+                    }}
+                  >
+                    <div className="relative w-full h-full flex items-center justify-center">
+                      <div className="relative w-full h-full max-w-[600px] max-h-[90vh] flex items-center justify-center">
+                        <Image
+                          src={product.image}
+                          alt={product.name}
+                          width={product.width}
+                          height={product.height}
+                          className="w-full h-full object-contain"
+                        />
+                        {/* Clickable button overlay - positioned within the image */}
+                        {isMostRecent && (
+                          <button
+                            onClick={() => setIsModalOpen(true)}
+                            className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-black/80 backdrop-blur-sm rounded-full px-4 py-3 z-10 hover:bg-black/90 transition-colors shadow-lg"
+                          >
+                            <span className="text-white text-sm font-medium">
+                              View more images
+                            </span>
+                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                              <svg
+                                className="w-4 h-4 text-white"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M12 4v16m8-8H4"
+                                />
+                              </svg>
+                            </div>
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
 
@@ -200,7 +221,8 @@ export default function Shoes() {
             </div>
 
             {products.map((product, index) => {
-              const isActive = index === activeIndex;
+              const isSelected = selectedIndices.has(index);
+              const isMostRecent = index === mostRecentActiveIndex;
               return (
                 <motion.div
                   key={product.name}
@@ -210,7 +232,7 @@ export default function Shoes() {
                   className="flex flex-col gap-3 md:gap-4 min-h-[40vh] md:min-h-[50vh] py-6 md:py-8 first:pt-0 last:pb-0"
                   initial={{ opacity: 0.4 }}
                   animate={{
-                    opacity: isActive ? 1 : 0.4,
+                    opacity: isSelected ? (isMostRecent ? 1 : 0.7) : 0.4,
                   }}
                   transition={{
                     duration: 0.5,
@@ -219,6 +241,9 @@ export default function Shoes() {
                 >
                   <h3 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-black tracking-tight">
                     {product.name}
+                    {isSelected && !isMostRecent && (
+                      <span className="ml-2 text-sm text-black/60">(selected)</span>
+                    )}
                   </h3>
                   <p className="font-sans font-normal [word-spacing:0.05em] text-base md:text-lg leading-relaxed text-black/90">
                     {product.description}
