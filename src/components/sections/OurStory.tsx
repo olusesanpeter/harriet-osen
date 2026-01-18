@@ -82,10 +82,6 @@ export default function OurStory() {
           >
             Harriet Osen is named after the founder&apos;s maternal and paternal grandmothers respectively.
           </p>
-          <div className="flex flex-col sm:flex-row sm:gap-8 text-white/95 font-sans text-base sm:text-lg md:text-xl pt-2">
-            <span>Harriet - strength - 1923</span>
-            <span>Osen - beauty - 1916</span>
-          </div>
         </div>
       </div>
 
