@@ -49,10 +49,6 @@ export default function FeedbackSection() {
           </motion.button>
         </motion.div>
       </div>
-
-      {/* Decorative elements */}
-      <div className="absolute top-0 left-0 w-32 h-32 bg-brand-red/5 rounded-full -translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute bottom-0 right-0 w-48 h-48 bg-brand-red/5 rounded-full translate-x-1/2 translate-y-1/2" />
     </section>
   )
 }
