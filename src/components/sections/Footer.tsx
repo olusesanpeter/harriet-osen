@@ -13,7 +13,7 @@ const products = [
     image: "/images/products/blue-rotterdam.png",
   },
   {
-    name: "Rotterdam Pump",
+    name: "Rotterdam Pump - Benni Pump",
     image: "/images/products/white-rotterdam.png",
   },
   {
@@ -25,7 +25,7 @@ const products = [
     image: "/images/products/brown-zebra.png",
   },
   {
-    name: "Yellow Brown Stiletto",
+    name: "Yellow/Brown Stiletto - Arua Sandal",
     image: "/images/products/yellow-brown.png",
   },
 ];
@@ -147,7 +147,7 @@ export default function Footer() {
                 />
               </div>
               <div className="mt-4 sm:mt-6 w-full max-w-2xl">
-                <label htmlFor="country" className="mb-2 block text-sm font-medium text-foreground">
+                <label htmlFor="country" className="mb-2 block text-sm font-medium text-black">
                   Where do you live?
                 </label>
                 <div className="relative">
@@ -224,7 +224,7 @@ export default function Footer() {
                           <div className="absolute inset-0 bg-brand-red/10" />
                         )}
                       </div>
-                      <span className={`text-sm md:text-base text-left ${isSelected ? 'text-brand-red font-medium' : 'text-black/80'}`}>
+                      <span className={`text-sm md:text-base text-left w-40 md:w-48 ${isSelected ? 'text-brand-red font-medium' : 'text-black/80'}`}>
                         {product.name}
                       </span>
                     </button>
