@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
 import ImageGalleryModal from '@/components/ImageGalleryModal'
+import MobileImageCarousel from '@/components/MobileImageCarousel'
 
 const products = [
   {
@@ -147,8 +148,8 @@ export default function Shoes() {
     <section id="shoes" className="py-12 md:py-32 bg-[#fff7ed]">
       <div className="w-full px-4 sm:px-6 md:px-12 lg:px-24 mx-auto">
         <div className="flex flex-col md:flex-row gap-6 md:gap-12 items-start">
-          {/* Sticky Image Container */}
-          <div className="w-full md:w-1/2 md:sticky md:top-0 md:self-start h-[50vh] md:h-screen py-4 md:py-8">
+          {/* Sticky Image Container (desktop only) */}
+          <div className="hidden md:block md:w-1/2 md:sticky md:top-0 md:self-start md:h-screen py-4 md:py-8">
             <div className="relative w-full h-full flex items-center md:items-start justify-center">
               {products.map((product, index) => {
                 const isSelected = selectedIndices.has(index);
@@ -177,11 +178,11 @@ export default function Shoes() {
                           height={product.height}
                           className="w-full h-full object-contain"
                         />
-                        {/* Clickable button overlay - positioned within the image */}
+                        {/* Clickable button overlay - positioned within the image (desktop only) */}
                         {isMostRecent && (
                           <button
                             onClick={() => setIsModalOpen(true)}
-                            className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-black/80 backdrop-blur-sm rounded-full px-4 py-3 z-10 hover:bg-black/90 transition-colors shadow-lg"
+                            className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden md:flex items-center gap-3 bg-black/80 backdrop-blur-sm rounded-full px-4 py-3 z-10 hover:bg-black/90 transition-colors shadow-lg"
                           >
                             <span className="text-white text-sm font-medium">
                               View more images
@@ -214,7 +215,7 @@ export default function Shoes() {
           {/* Scrollable Text Sections */}
           <div className="w-full md:w-1/2 flex flex-col">
             {/* Header */}
-            <div className="flex flex-col text-left mb-12 md:mb-56 pt-8 md:pt-24">
+            <div className="flex flex-col text-left mb-4 md:mb-56 pt-4 md:pt-24">
               <h2 className="font-display text-[40px] sm:text-[60px] md:text-[80px] lg:text-display-lg tracking-tight text-brand-red">
                 Crafting the unexpected
               </h2>
@@ -245,6 +246,13 @@ export default function Shoes() {
                   <p className="font-sans font-normal [word-spacing:0.05em] text-base md:text-lg leading-relaxed text-black/90">
                     {product.description}
                   </p>
+                  {/* Mobile Image Carousel */}
+                  <div className="md:hidden">
+                    <MobileImageCarousel
+                      images={product.galleryImages}
+                      productName={product.name}
+                    />
+                  </div>
                 </motion.div>
               );
             })}

@@ -62,10 +62,10 @@ export default function Navbar() {
           </button>
           
           {/* Navigation Links */}
-          <div className="flex items-center gap-3 md:gap-6">
+          <div className="flex items-center gap-4 md:gap-6">
             <a
               href="#shoes"
-              className="text-[12px] md:text-[14px] text-black/70 hover:text-black transition-colors duration-200"
+              className="text-[13px] md:text-[14px] text-black/70 hover:text-black transition-colors duration-200 whitespace-nowrap"
               style={{ letterSpacing: "-0.3px" }}
               onClick={(e) => {
                 e.preventDefault();
@@ -76,25 +76,27 @@ export default function Navbar() {
             </a>
             <a
               href="#our-story"
-              className="text-[12px] md:text-[14px] text-black/70 hover:text-black transition-colors duration-200"
+              className="text-[13px] md:text-[14px] text-black/70 hover:text-black transition-colors duration-200 whitespace-nowrap"
               style={{ letterSpacing: "-0.3px" }}
               onClick={(e) => {
                 e.preventDefault();
                 scrollToSection("our-story");
               }}
             >
-              Our Story
+              <span className="md:hidden">Story</span>
+              <span className="hidden md:inline">Our Story</span>
             </a>
             <a
               href="#footer"
-              className="text-[12px] md:text-[14px] text-black/70 hover:text-black transition-colors duration-200"
+              className="text-[13px] md:text-[14px] text-black/70 hover:text-black transition-colors duration-200 whitespace-nowrap"
               style={{ letterSpacing: "-0.3px" }}
               onClick={(e) => {
                 e.preventDefault();
                 scrollToSection("footer");
               }}
             >
-              Tell us what you love<sup className="text-[0.6em]">♥</sup>
+              <span className="md:hidden">Love ♥</span>
+              <span className="hidden md:inline">Tell us what you love<sup className="text-[0.6em]">♥</sup></span>
             </a>
           </div>
         </div>

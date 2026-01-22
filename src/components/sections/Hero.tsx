@@ -3,14 +3,23 @@ import Image from "next/image";
 export default function Hero() {
   return (
     <section className="relative h-dvh min-h-[100vh] w-full overflow-hidden z-0">
-      {/* Full-screen background image */}
+      {/* Mobile background image */}
+      <Image
+        src="/images/products/robyn-zebra-alt-3.png"
+        alt="Harriet Osen Boots"
+        fill
+        priority
+        quality={90}
+        className="object-cover object-center md:hidden"
+      />
+      {/* Desktop background image */}
       <Image
         src="/images/hero/hero-boots.png"
         alt="Harriet Osen Boots"
         fill
         priority
         quality={90}
-        className="object-cover object-center"
+        className="hidden object-cover object-center md:block"
       />
 
       {/* Logo overlay - center */}
