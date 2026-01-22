@@ -12,7 +12,7 @@ const products = [
     image: "/images/products/blue-rotterdam.png",
     width: 629,
     height: 943,
-    description: "The moulded heel on this stiletto was inspired by modern architecture seen on the founder’s travels to Rotterdam. Featuring a satin upper and and Italian leather lining in a striking cobalt, these shoes are bold and statement making. ",
+    description: "The moulded heel on this sandal was inspired by modern architecture seen on the founder's travels to Rotterdam. Featuring a satin upper and and Italian leather lining in a striking cobalt, these shoes are bold and statement making.",
     galleryImages: [
       { src: "/images/products/blue-rotterdam/blue-rotterdam-front.jpg", type: 'image' as const, alt: "Rotterdam Blue front", width: 1200, height: 1800 },
       { src: "/images/products/blue-rotterdam/blue-rotterdam-side.jpg", type: 'image' as const, alt: "Rotterdam Blue side", width: 1200, height: 1800 },
@@ -21,7 +21,7 @@ const products = [
     ]
   },
   {
-    name: "Rotterdam Pump",
+    name: "Rotterdam Pump - Benni Pump",
     image: "/images/products/white-rotterdam.png",
     width: 415,
     height: 622,
@@ -45,7 +45,7 @@ const products = [
       { src: "/images/products/brown-zebra/robyn-zebra-patch.jpg", type: 'image' as const, alt: "Robyn Zebra patch", width: 1200, height: 1800 },
       { src: "/images/products/robyn-zebra-alt-1.png", type: 'image' as const, alt: "Robyn Zebra", width: 1200, height: 1800 },
       { src: "/images/products/lifestyle/robyn-zebra-lifestyle-1.jpg", type: 'image' as const, alt: "Robyn Zebra lifestyle", width: 1200, height: 1800 },
-      { src: "/images/loader/robyn-boot-sketch.mp4", type: 'video' as const, alt: "Robyn boot sketch process" },
+      { src: "/images/products/robyn-brown-sketch.mp4", type: 'video' as const, alt: "Robyn boot sketch process" },
     ]
   },
   {
@@ -62,7 +62,7 @@ const products = [
     ]
   },
   {
-    name: "Yellow Brown Stiletto",
+    name: "Yellow/Brown Stiletto - Arua Sandal",
     image: "/images/products/yellow-brown.png",
     width: 415,
     height: 623,
@@ -71,7 +71,7 @@ const products = [
       { src: "/images/products/yellow-brown/yellow-brown-front.jpg", type: 'image' as const, alt: "Yellow Brown front", width: 1200, height: 1800 },
       { src: "/images/products/yellow-brown/yellow-brown-side.jpg", type: 'image' as const, alt: "Yellow Brown side", width: 1200, height: 1800 },
       { src: "/images/loader/yellow-brown.jpg", type: 'image' as const, alt: "Yellow Brown detail", width: 1200, height: 800 },
-      { src: "/images/loader/yellow-brown-sketch.mp4", type: 'video' as const, alt: "Yellow Brown sketch process" },
+      { src: "/images/products/yellow-brown-sketch.mp4", type: 'video' as const, alt: "Yellow Brown sketch process" },
     ]
   },
 ];
