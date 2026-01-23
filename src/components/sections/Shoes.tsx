@@ -21,7 +21,7 @@ const products = [
     ]
   },
   {
-    name: "Rotterdam Pump - Benni Pump",
+    name: "Benni Pump",
     image: "/images/products/white-rotterdam.png",
     width: 415,
     height: 622,
@@ -62,7 +62,7 @@ const products = [
     ]
   },
   {
-    name: "Yellow/Brown Stiletto - Arua Sandal",
+    name: "Arua Sandal",
     image: "/images/products/yellow-brown.png",
     width: 415,
     height: 623,

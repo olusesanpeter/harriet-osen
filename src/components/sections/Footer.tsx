@@ -13,7 +13,7 @@ const products = [
     image: "/images/products/blue-rotterdam.png",
   },
   {
-    name: "Rotterdam Pump - Benni Pump",
+    name: "Benni Pump",
     image: "/images/products/white-rotterdam.png",
   },
   {
@@ -25,7 +25,7 @@ const products = [
     image: "/images/products/brown-zebra.png",
   },
   {
-    name: "Yellow/Brown Stiletto - Arua Sandal",
+    name: "Arua Sandal",
     image: "/images/products/yellow-brown.png",
   },
 ];
@@ -51,6 +51,8 @@ export default function Footer() {
   const [country, setCountry] = useState('');
   const [newsletter, setNewsletter] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   
 
   const toggleShoe = (shoeName: string) => {
@@ -69,7 +71,8 @@ export default function Footer() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+    setErrorMessage('');
+
     try {
       const response = await fetch('/api/feedback', {
         method: 'POST',
@@ -86,21 +89,21 @@ export default function Footer() {
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
+        setIsSubmitted(true);
         // Reset form
         setSelectedShoes([]);
         setName('');
         setEmail('');
         setCountry('');
         setNewsletter(false);
-        alert('Thank you for your feedback!');
       } else {
-        alert(data.message || 'Failed to submit feedback. Please try again.');
+        setErrorMessage(data.message || 'Failed to submit feedback. Please try again.');
       }
     } catch (error) {
       console.error('Error submitting feedback:', error);
-      alert('Failed to submit feedback. Please try again.');
+      setErrorMessage('Failed to submit feedback. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -121,11 +124,79 @@ export default function Footer() {
           <h2 className="font-display text-[40px] sm:text-[60px] md:text-[80px] lg:text-[100px] xl:text-[120px] leading-[1.1] tracking-tight text-brand-red pt-8 md:pt-12 mb-6 text-left">
             Tell us what you love<sup className="text-[0.6em]">♥</sup>
           </h2>
-          <p className="font-sans font-normal [word-spacing:0.05em] text-base sm:text-lg md:text-xl leading-relaxed text-black/90 mb-6 sm:mb-8 text-left">
-            We&apos;d love to know which designs speak to you. Share your favorites and be the first to know when they&apos;re available.
-          </p>
-          
-          <form onSubmit={handleSubmit}>
+          {isSubmitted ? (
+            <motion.div
+              className="py-12 sm:py-16 md:py-20"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div className="flex flex-col items-start">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.2, type: "spring", stiffness: 200 }}
+                  className="mb-6"
+                >
+                  <svg
+                    className="w-16 h-16 sm:w-20 sm:h-20 text-brand-red"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </motion.div>
+                <motion.h3
+                  className="font-display text-[32px] sm:text-[48px] md:text-[64px] leading-[1.1] tracking-tight text-brand-red mb-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                >
+                  Thank you!
+                </motion.h3>
+                <motion.p
+                  className="font-sans text-lg sm:text-xl text-black/80 mb-8 max-w-md"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                >
+                  We&apos;ve received your feedback. You&apos;ll be the first to know when your favorites are available.
+                </motion.p>
+                <motion.button
+                  type="button"
+                  onClick={() => setIsSubmitted(false)}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                  className="text-brand-red underline underline-offset-4 hover:no-underline transition-all"
+                >
+                  Submit another response
+                </motion.button>
+              </div>
+            </motion.div>
+          ) : (
+            <>
+              <p className="font-sans font-normal [word-spacing:0.05em] text-base sm:text-lg md:text-xl leading-relaxed text-black/90 mb-6 sm:mb-8 text-left">
+                We&apos;d love to know which designs speak to you. Share your favorites and be the first to know when they&apos;re available.
+              </p>
+
+              {errorMessage && (
+                <motion.div
+                  className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <p className="text-red-700 text-sm">{errorMessage}</p>
+                </motion.div>
+              )}
+
+              <form onSubmit={handleSubmit}>
             {/* Name, Email, and Country */}
             <div className="mb-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 w-full max-w-2xl">
@@ -285,6 +356,8 @@ export default function Footer() {
               </motion.button>
             </div>
           </form>
+            </>
+          )}
         </motion.div>
 
       </Container>

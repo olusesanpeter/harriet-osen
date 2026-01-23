@@ -1,8 +1,8 @@
 export const siteConfig = {
   name: "Harriet Osen",
-  description: "Premium fashion footwear designed for the modern individual",
+  description: "Shoes for Strutting",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://harrietosen.com",
-  ogImage: "/images/og-image.jpg",
+  ogImage: "/images/hero/hero-boots.png",
   keywords: [
     "fashion shoes",
     "luxury footwear",

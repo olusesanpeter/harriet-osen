@@ -70,7 +70,7 @@ export default function OurStory() {
               className="font-sans font-normal [word-spacing:0.05em] text-base sm:text-lg md:text-xl leading-relaxed text-white/95 max-w-[657px]"
               style={{ fontFeatureSettings: "'liga' 1, 'calt' 1" }}
             >
-              The brand was born on a warm summer evening in 2019, out of the founder&apos;s own desire to access boldly designed, unique shoes made from the best materials, that fit into wardrobes curated for bold expression.
+              The brand was born on a warm summer evening in 2019, when a public mishap involving a broken heel inspired the founder&apos;s own desire to access boldly designed, unique shoes made from the best materials, that fit into wardrobes curated for bold expression.
             </p>
           </div>
           
@@ -80,7 +80,7 @@ export default function OurStory() {
               className="font-sans font-normal [word-spacing:0.05em] text-base sm:text-lg md:text-xl leading-relaxed text-white/95 max-w-[657px]"
               style={{ fontFeatureSettings: "'liga' 1, 'calt' 1" }}
             >
-              Founded by Teniola Alli, the Lagos born, London based designer spent most of her career consulting within Finance and Oil and Gas. She started working on brand development in 2021, first prototyping her designs in Hong Kong, before finally settling on skilled artisans in Portugal to bring her designs to life.
+              Founded by Tẹ́níọlá Alli, the Lagos born, London based designer spent most of her career consulting within Finance and Oil and Gas. She started working on brand development in 2021, first prototyping her designs in Hong Kong, before finally settling on skilled artisans in Portugal to bring her designs to life.
             </p>
             <p
               className="font-sans font-normal [word-spacing:0.05em] text-base sm:text-lg md:text-xl leading-relaxed text-white/95 max-w-[657px]"

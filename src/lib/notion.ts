@@ -6,8 +6,8 @@
  * Fetches the database schema to see available properties
  */
 export async function getNotionDatabaseSchema() {
-  const apiKey = process.env.NOTION_API_KEY;
-  const databaseId = process.env.NOTION_DATABASE_ID;
+  const apiKey = process.env.NOTION_API_KEY?.trim();
+  const databaseId = process.env.NOTION_DATABASE_ID?.trim().replace(/['"]/g, '');
 
   if (!apiKey || !databaseId) {
     throw new Error("Notion API credentials not configured");
@@ -60,8 +60,8 @@ export interface NotionResponse {
 export async function addNewsletterToNotion(
   data: NewsletterData
 ): Promise<NotionResponse> {
-  const apiKey = process.env.NOTION_API_KEY;
-  const databaseId = process.env.NOTION_DATABASE_ID;
+  const apiKey = process.env.NOTION_API_KEY?.trim();
+  const databaseId = process.env.NOTION_DATABASE_ID?.trim().replace(/['"]/g, '');
 
   if (!apiKey || !databaseId) {
     throw new Error("Notion API credentials not configured");
@@ -135,8 +135,8 @@ export async function addNewsletterToNotion(
 export async function addFeedbackToNotion(
   data: FeedbackData
 ): Promise<NotionResponse> {
-  const apiKey = process.env.NOTION_API_KEY;
-  const databaseId = process.env.NOTION_DATABASE_ID;
+  const apiKey = process.env.NOTION_API_KEY?.trim();
+  const databaseId = process.env.NOTION_DATABASE_ID?.trim().replace(/['"]/g, '');
 
   if (!apiKey || !databaseId) {
     throw new Error("Notion API credentials not configured");

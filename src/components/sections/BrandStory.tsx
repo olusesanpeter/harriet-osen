@@ -28,7 +28,7 @@ export default function BrandStory() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 2, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
             >
-              Shoes for the woman who loves the art of getting dressed.
+              Shoes for the woman who loves the art of getting dressed
             </motion.p>
             <motion.p
               initial={{ opacity: 0, y: 30 }}
@@ -68,7 +68,7 @@ export default function BrandStory() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 2, ease: [0.22, 1, 0.36, 1], delay: 1.4 }}
             >
-              Shoes for Owambe, for dinner with the girls, for the solo museum date
+              Shoes for Ówàmbẹ̀, for dinner with the girls, for the solo museum date
             </motion.p>
             <motion.p
               initial={{ opacity: 0, y: 30 }}
@@ -76,7 +76,7 @@ export default function BrandStory() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 2, ease: [0.22, 1, 0.36, 1], delay: 1.6 }}
             >
-              Harriet Osen - shoes for strutting.
+              Harriet Osen - Shoes for Strutting.
             </motion.p>
           </div>
         </div>
