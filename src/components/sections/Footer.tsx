@@ -166,7 +166,7 @@ export default function Footer() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.4 }}
                 >
-                  We&apos;ve received your feedback. You&apos;ll be the first to know when your favorites are available.
+                  We&apos;ve received your feedback. You&apos;ll be the first to know when your favorites are available for purchase.
                 </motion.p>
                 <motion.button
                   type="button"
