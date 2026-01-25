@@ -17,7 +17,7 @@ const products = [
       { src: "/images/products/blue-rotterdam/blue-rotterdam-front.jpg", type: 'image' as const, alt: "Rotterdam Blue front", width: 1200, height: 1800 },
       { src: "/images/products/blue-rotterdam/blue-rotterdam-side.jpg", type: 'image' as const, alt: "Rotterdam Blue side", width: 1200, height: 1800 },
       { src: "/images/products/blue-rotterdam/blue-rotterdam-heel.jpg", type: 'image' as const, alt: "Rotterdam Blue heel", width: 1200, height: 1800 },
-      { src: "/images/loader/blue-rotterdam.jpg", type: 'image' as const, alt: "Rotterdam Blue detail", width: 1200, height: 800 },
+      { src: "/images/products/blue-rotterdam/blue-rotterdam-sketch.png", type: 'image' as const, alt: "Rotterdam Blue sketch process", width: 1200, height: 1800 },
     ]
   },
   {
@@ -30,7 +30,7 @@ const products = [
       { src: "/images/products/white-rotterdam/white-rotterdam-front.jpg", type: 'image' as const, alt: "White Rotterdam front", width: 1200, height: 1800 },
       { src: "/images/products/white-rotterdam/white-rotterdam-side.jpg", type: 'image' as const, alt: "White Rotterdam side", width: 1200, height: 1800 },
       { src: "/images/products/white-rotterdam/white-rotterdam-heel.jpg", type: 'image' as const, alt: "White Rotterdam heel", width: 1200, height: 1800 },
-      { src: "/images/loader/white-rotterdam.jpg", type: 'image' as const, alt: "White Rotterdam detail", width: 1200, height: 800 },
+      { src: "/images/products/white-rotterdam/white-rotterdam-sketch.jpg", type: 'image' as const, alt: "White Rotterdam sketch process", width: 1200, height: 1800 },
     ]
   },
   {
@@ -44,9 +44,7 @@ const products = [
       { src: "/images/products/brown-zebra/robyn-zebra-side.jpg", type: 'image' as const, alt: "Robyn Zebra side", width: 1200, height: 1800 },
       { src: "/images/products/brown-zebra/robyn-zebra-patch.jpg", type: 'image' as const, alt: "Robyn Zebra patch", width: 1200, height: 1800 },
       { src: "/images/products/robyn-zebra-alt-1.png", type: 'image' as const, alt: "Robyn Zebra", width: 1200, height: 1800 },
-      { src: "/images/products/lifestyle/robyn-zebra-lifestyle-1.jpg", type: 'image' as const, alt: "Robyn Zebra lifestyle", width: 1200, height: 1800 },
-      { src: "/images/products/robyn-brown-sketch.mp4", type: 'video' as const, alt: "Robyn boot sketch process" },
-    ]
+      { src: "/images/products/lifestyle/robyn-zebra-lifestyle-1.jpg", type: 'image' as const, alt: "Robyn Zebra lifestyle", width: 1200, height: 1800 },    ]
   },
   {
     name: "Robyn Brown",
@@ -59,6 +57,7 @@ const products = [
       { src: "/images/products/robyn-brown/robyn-brown-side.jpg", type: 'image' as const, alt: "Robyn Brown side", width: 1200, height: 1800 },
       { src: "/images/products/robyn-brown/robyn-brown-patch.jpg", type: 'image' as const, alt: "Robyn Brown patch", width: 1200, height: 1800 },
       { src: "/images/products/lifestyle/robyn-zebra-lifestyle-2.jpg", type: 'image' as const, alt: "Robyn Brown lifestyle", width: 1200, height: 1800 },
+      { src: "/images/products/robyn-brown/robyn-brown-sketch.jpg", type: 'image' as const, alt: "Robyn Brown sketch process", width: 1200, height: 1800 },
     ]
   },
   {
@@ -70,8 +69,7 @@ const products = [
     galleryImages: [
       { src: "/images/products/yellow-brown/yellow-brown-front.jpg", type: 'image' as const, alt: "Yellow Brown front", width: 1200, height: 1800 },
       { src: "/images/products/yellow-brown/yellow-brown-side.jpg", type: 'image' as const, alt: "Yellow Brown side", width: 1200, height: 1800 },
-      { src: "/images/loader/yellow-brown.jpg", type: 'image' as const, alt: "Yellow Brown detail", width: 1200, height: 800 },
-      { src: "/images/products/yellow-brown-sketch.mp4", type: 'video' as const, alt: "Yellow Brown sketch process" },
+      { src: "/images/products/yellow-brown/yellow-brown-sketch.png", type: 'image' as const, alt: "Yellow Brown sketch process", width: 1200, height: 1800 },
     ]
   },
 ];
@@ -217,7 +215,7 @@ export default function Shoes() {
             {/* Header */}
             <div className="flex flex-col text-left mb-4 md:mb-56 pt-4 md:pt-24">
               <h2 className="font-display text-[40px] sm:text-[60px] md:text-[80px] lg:text-display-lg tracking-tight text-brand-red">
-                Crafting The Unexpected
+                Crafting the Unexpected
               </h2>
             </div>
 
