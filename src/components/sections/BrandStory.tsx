@@ -44,7 +44,7 @@ export default function BrandStory() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 2, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
             >
-              Shoes to elevate jeans and a cute top, and complete that dress you&apos;ve been waiting for a special occasion to wear.
+              Shoes to elevate jeans and a cute top, and complete that dress you&apos;ve been waiting for a special occasion to wear
             </motion.p>
             <motion.p
               initial={{ opacity: 0, y: 30 }}
@@ -60,7 +60,7 @@ export default function BrandStory() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 2, ease: [0.22, 1, 0.36, 1], delay: 1.2 }}
             >
-              Shoes with identity.
+              Shoes with identity
             </motion.p>
             <motion.p
               initial={{ opacity: 0, y: 30 }}

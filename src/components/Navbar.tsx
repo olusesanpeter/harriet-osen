@@ -5,6 +5,7 @@ import Image from "next/image";
 
 export default function Navbar() {
   const [isVisible, setIsVisible] = useState(false);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,6 +19,38 @@ export default function Navbar() {
       // Show navbar when Brand Story section is halfway scrolled into view
       // This means the top of the section has passed the middle of the viewport
       setIsVisible(brandStoryRect.top <= viewportHeight / 2);
+
+      // Determine which section is currently active
+      const sections = [
+        { id: "shoes", element: document.getElementById("shoes") },
+        { id: "our-story", element: document.getElementById("our-story") },
+        { id: "footer", element: document.getElementById("footer") },
+      ];
+
+      // Find the section that is currently most visible
+      // A section is active if its top is above a threshold (150px from top)
+      // and it's the section with the top closest to that threshold
+      const threshold = 150;
+      let activeId: string | null = null;
+      let closestDistance = Infinity;
+
+      sections.forEach(({ id, element }) => {
+        if (!element) return;
+
+        const rect = element.getBoundingClientRect();
+        const sectionTop = rect.top;
+        
+        // Check if section top is above or near the threshold
+        if (sectionTop <= threshold + 100) {
+          const distance = Math.abs(sectionTop - threshold);
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            activeId = id;
+          }
+        }
+      });
+
+      setActiveSection(activeId);
     };
 
     // Check on mount and on scroll
@@ -65,7 +98,7 @@ export default function Navbar() {
           <div className="flex items-center gap-4 md:gap-6">
             <a
               href="#shoes"
-              className="text-[13px] md:text-[14px] text-black/70 hover:text-black transition-colors duration-200 whitespace-nowrap"
+              className="relative text-[13px] md:text-[14px] text-black/70 hover:text-black transition-colors duration-200 whitespace-nowrap"
               style={{ letterSpacing: "-0.3px" }}
               onClick={(e) => {
                 e.preventDefault();
@@ -73,10 +106,13 @@ export default function Navbar() {
               }}
             >
               Shoes
+              {activeSection === "shoes" && (
+                <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 text-brand-red">—</span>
+              )}
             </a>
             <a
               href="#our-story"
-              className="text-[13px] md:text-[14px] text-black/70 hover:text-black transition-colors duration-200 whitespace-nowrap"
+              className="relative text-[13px] md:text-[14px] text-black/70 hover:text-black transition-colors duration-200 whitespace-nowrap"
               style={{ letterSpacing: "-0.3px" }}
               onClick={(e) => {
                 e.preventDefault();
@@ -85,10 +121,13 @@ export default function Navbar() {
             >
               <span className="md:hidden">Story</span>
               <span className="hidden md:inline">Our Story</span>
+              {activeSection === "our-story" && (
+                <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 text-brand-red">—</span>
+              )}
             </a>
             <a
               href="#footer"
-              className="text-[13px] md:text-[14px] text-black/70 hover:text-black transition-colors duration-200 whitespace-nowrap"
+              className="relative text-[13px] md:text-[14px] text-black/70 hover:text-black transition-colors duration-200 whitespace-nowrap"
               style={{ letterSpacing: "-0.3px" }}
               onClick={(e) => {
                 e.preventDefault();
@@ -97,6 +136,9 @@ export default function Navbar() {
             >
               <span className="md:hidden">Love ♥</span>
               <span className="hidden md:inline">Tell us what you love<sup className="text-[0.6em]">♥</sup></span>
+              {activeSection === "footer" && (
+                <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 text-brand-red">—</span>
+              )}
             </a>
           </div>
         </div>

@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface CarouselImage {
   name: string;
@@ -20,6 +20,10 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const scrollPositionRef = useRef(0);
   const velocityRef = useRef(speed);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isTouching, setIsTouching] = useState(false);
+  const dragStartRef = useRef({ x: 0, scrollLeft: 0 });
+  const touchStartRef = useRef({ x: 0, scrollLeft: 0 });
 
   useEffect(() => {
     const container = scrollContainerRef.current;
@@ -34,7 +38,7 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
     scrollPositionRef.current = container.scrollLeft;
 
     const scroll = () => {
-      if (container) {
+      if (container && !isDragging && !isTouching) {
         velocityRef.current = maxSpeed;
 
         if (velocityRef.current > 0.01) {
@@ -54,7 +58,91 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
     const animationFrame = setInterval(scroll, 16);
 
     return () => clearInterval(animationFrame);
-  }, [images.length, speed]);
+  }, [images.length, speed, isDragging, isTouching]);
+
+  // Handle document-level mouse events for smooth dragging
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const container = scrollContainerRef.current;
+      if (!container) return;
+      
+      const x = e.pageX - container.offsetLeft;
+      const walk = (x - dragStartRef.current.x) * 2; // Multiply by 2 for faster scrolling
+      container.scrollLeft = dragStartRef.current.scrollLeft - walk;
+      scrollPositionRef.current = container.scrollLeft;
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+      const container = scrollContainerRef.current;
+      if (container) {
+        container.style.cursor = 'grab';
+        container.style.userSelect = '';
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging]);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    
+    setIsDragging(true);
+    dragStartRef.current = {
+      x: e.pageX - container.offsetLeft,
+      scrollLeft: container.scrollLeft
+    };
+    container.style.cursor = 'grabbing';
+    container.style.userSelect = 'none';
+  };
+
+  const handleMouseLeave = () => {
+    // Only stop dragging if mouse leaves while not actively dragging
+    // This prevents stopping drag when mouse briefly leaves during drag
+    if (isDragging) return;
+    
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.style.cursor = 'grab';
+    }
+  };
+
+  // Handle touch events for mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    
+    setIsTouching(true);
+    touchStartRef.current = {
+      x: e.touches[0].pageX - container.offsetLeft,
+      scrollLeft: container.scrollLeft
+    };
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isTouching) return;
+    
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    
+    const x = e.touches[0].pageX - container.offsetLeft;
+    const walk = (x - touchStartRef.current.x) * 2;
+    container.scrollLeft = touchStartRef.current.scrollLeft - walk;
+    scrollPositionRef.current = container.scrollLeft;
+  };
+
+  const handleTouchEnd = () => {
+    setIsTouching(false);
+  };
 
   const renderItems = () => {
     return (
@@ -114,7 +202,12 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
   return (
     <div 
       ref={scrollContainerRef}
-      className="w-full overflow-x-auto scrollbar-hide"
+      className="w-full overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing select-none touch-pan-x"
+      onMouseDown={handleMouseDown}
+      onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       <motion.div 
         className="flex gap-5" 

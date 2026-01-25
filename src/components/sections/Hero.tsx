@@ -5,7 +5,7 @@ export default function Hero() {
     <section className="relative h-[85vh] md:h-dvh md:min-h-[100vh] w-full overflow-hidden z-0">
       {/* Mobile background image */}
       <Image
-        src="/images/products/robyn-zebra-alt-3.png"
+        src="/images/hero/hero-mobile.jpg"
         alt="Harriet Osen Boots"
         fill
         priority

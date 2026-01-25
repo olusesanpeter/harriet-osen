@@ -1,15 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
-
-const loaderImages = [
-  "/images/loader/loader.png",
-  "/images/loader/loader-1.png",
-  "/images/loader/loader-2.png",
-  "/images/loader/loader-3.png",
-  "/images/loader/loader-4.png",
-];
 
 interface LoadingScreenProps {
   onLoadingComplete: () => void;
@@ -17,10 +9,9 @@ interface LoadingScreenProps {
 
 export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
   const [count, setCount] = useState(0);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [nextImageIndex, setNextImageIndex] = useState(1);
   const [isExiting, setIsExiting] = useState(false);
-  const [imageOpacity, setImageOpacity] = useState(1);
+  const [videoWidth, setVideoWidth] = useState<number | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const handleComplete = useCallback(() => {
     setIsExiting(true);
@@ -49,37 +40,66 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
   }, []);
 
   useEffect(() => {
-    // Rotate through images during loading with smooth crossfade
-    const fadeDuration = 200; // Crossfade transition duration
-    const imageInterval = 1000; // Slower rotation - 1000ms (1 second) per image
-
-    let intervalId: NodeJS.Timeout;
-
-    const rotateImage = () => {
-      // Start crossfade: fade out current, fade in next
-      setImageOpacity(0);
-      
-      // After fade completes, swap images and reset opacity
-      setTimeout(() => {
-        setCurrentImageIndex((prev) => {
-          const next = (prev + 1) % loaderImages.length;
-          setNextImageIndex((next + 1) % loaderImages.length);
-          return next;
+    // Measure video width when it loads and renders
+    const video = videoRef.current;
+    if (video) {
+      const updateWidth = () => {
+        // Use requestAnimationFrame to ensure measurement happens after render
+        requestAnimationFrame(() => {
+          // Get the actual rendered dimensions of the video
+          const videoRect = video.getBoundingClientRect();
+          const width = videoRect.width;
+          
+          // Also check the video's natural dimensions to calculate proper width
+          if (video.videoWidth > 0 && video.videoHeight > 0) {
+            const aspectRatio = video.videoWidth / video.videoHeight;
+            const maxHeight = Math.min(window.innerHeight * 0.6, video.videoHeight);
+            const calculatedWidth = maxHeight * aspectRatio;
+            const containerWidth = video.parentElement?.clientWidth || 0;
+            
+            // Use the smaller of: calculated width based on max-height, or container width
+            const finalWidth = Math.min(calculatedWidth, containerWidth);
+            
+            if (finalWidth > 0) {
+              setVideoWidth(finalWidth);
+            } else if (width > 0) {
+              setVideoWidth(width);
+            }
+          } else if (width > 0) {
+            setVideoWidth(width);
+          }
         });
-        setImageOpacity(1);
-      }, fadeDuration);
-    };
-
-    // Start rotation after initial delay (show first image for a bit)
-    const initialTimeout = setTimeout(() => {
-      rotateImage();
-      intervalId = setInterval(rotateImage, imageInterval);
-    }, imageInterval);
-
-    return () => {
-      clearTimeout(initialTimeout);
-      if (intervalId) clearInterval(intervalId);
-    };
+      };
+      
+      // Use multiple events to catch video loading at different stages
+      video.addEventListener('loadedmetadata', updateWidth);
+      video.addEventListener('loadeddata', updateWidth);
+      video.addEventListener('canplay', updateWidth);
+      
+      // Use ResizeObserver to track size changes
+      const resizeObserver = new ResizeObserver(() => {
+        updateWidth();
+      });
+      resizeObserver.observe(video);
+      
+      // Initial measurement - try immediately and with small delays
+      updateWidth(); // Try immediately
+      const timeout1 = setTimeout(updateWidth, 50);
+      const timeout2 = setTimeout(updateWidth, 200);
+      
+      // Also update on window resize
+      window.addEventListener('resize', updateWidth);
+      
+      return () => {
+        video.removeEventListener('loadedmetadata', updateWidth);
+        video.removeEventListener('loadeddata', updateWidth);
+        video.removeEventListener('canplay', updateWidth);
+        resizeObserver.disconnect();
+        window.removeEventListener('resize', updateWidth);
+        clearTimeout(timeout1);
+        clearTimeout(timeout2);
+      };
+    }
   }, []);
 
   useEffect(() => {
@@ -98,9 +118,18 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
         isExiting ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
     >
-      {/* Header with logo and counter */}
-      <div className="w-full max-w-[600px] px-6 mb-4">
-        <div className="flex items-center justify-between">
+      {/* Centered container for all content */}
+      <div className="w-full max-w-[600px] px-6 flex flex-col items-center">
+        {/* Header with logo and counter - matches video width */}
+        <div 
+          className="flex items-center justify-between mb-4 transition-all duration-200"
+          style={{ 
+            width: videoWidth ? `${videoWidth}px` : '100%', 
+            maxWidth: '100%',
+            opacity: videoWidth ? 1 : 0,
+            transition: videoWidth ? 'width 200ms ease-out, opacity 200ms ease-out' : 'opacity 200ms ease-out'
+          }}
+        >
           {/* Logo */}
           <div className="relative h-6 w-32">
             <Image
@@ -117,39 +146,36 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
             {count.toString().padStart(2, "0")}
           </span>
         </div>
-      </div>
 
-      {/* Image container */}
-      <div className="relative w-full max-w-[600px] px-6">
-        <div className="relative w-full aspect-square">
-          {/* Current image */}
-          <Image
-            src={loaderImages[currentImageIndex]}
-            alt="Loading"
-            fill
-            className="object-cover transition-opacity duration-200"
-            style={{ opacity: imageOpacity }}
-            priority
-          />
-          {/* Next image (for smooth crossfade) */}
-          <Image
-            src={loaderImages[nextImageIndex]}
-            alt="Loading"
-            fill
-            className="object-cover transition-opacity duration-200 absolute inset-0"
-            style={{ opacity: 1 - imageOpacity }}
-            priority
+        {/* Video container - defines the width for all elements */}
+        <div className="relative w-full max-h-[60vh] flex items-center justify-center">
+          <video
+            ref={videoRef}
+            src="/images/loader/loader.mp4"
+            className="w-full h-auto max-h-[60vh] object-contain"
+            autoPlay
+            loop
+            muted
+            playsInline
           />
         </div>
-      </div>
 
-      {/* Progress bar */}
-      <div className="w-full max-w-[600px] px-6 mt-4">
-        <div className="h-[2px] w-full bg-neutral-200 overflow-hidden">
-          <div
-            className="h-full bg-brand-red transition-all duration-75 ease-linear"
-            style={{ width: `${count}%` }}
-          />
+        {/* Progress bar - matches video width */}
+        <div 
+          className="mt-4 transition-all duration-200"
+          style={{ 
+            width: videoWidth ? `${videoWidth}px` : '100%', 
+            maxWidth: '100%',
+            opacity: videoWidth ? 1 : 0,
+            transition: videoWidth ? 'width 200ms ease-out, opacity 200ms ease-out' : 'opacity 200ms ease-out'
+          }}
+        >
+          <div className="h-[2px] w-full bg-neutral-200 overflow-hidden">
+            <div
+              className="h-full bg-brand-red transition-all duration-75 ease-linear"
+              style={{ width: `${count}%` }}
+            />
+          </div>
         </div>
       </div>
     </div>

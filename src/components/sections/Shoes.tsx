@@ -12,7 +12,7 @@ const products = [
     image: "/images/products/blue-rotterdam.png",
     width: 629,
     height: 943,
-    description: "The moulded heel on this sandal was inspired by modern architecture seen on the founder's travels to Rotterdam. Featuring a satin upper and and Italian leather lining in a striking cobalt, these shoes are bold and statement making.",
+    description: "The moulded heel on this sandal was inspired by modern architecture seen on the founder's travels to Rotterdam. Featuring a satin upper and an Italian leather lining in a striking cobalt, these shoes are bold and statement making.",
     galleryImages: [
       { src: "/images/products/blue-rotterdam/blue-rotterdam-front.jpg", type: 'image' as const, alt: "Rotterdam Blue front", width: 1200, height: 1800 },
       { src: "/images/products/blue-rotterdam/blue-rotterdam-side.jpg", type: 'image' as const, alt: "Rotterdam Blue side", width: 1200, height: 1800 },
