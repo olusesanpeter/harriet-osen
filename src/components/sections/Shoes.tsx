@@ -217,7 +217,7 @@ export default function Shoes() {
             {/* Header */}
             <div className="flex flex-col text-left mb-4 md:mb-56 pt-4 md:pt-24">
               <h2 className="font-display text-[40px] sm:text-[60px] md:text-[80px] lg:text-display-lg tracking-tight text-brand-red">
-                Crafting the unexpected
+                Crafting The Unexpected
               </h2>
             </div>
 
