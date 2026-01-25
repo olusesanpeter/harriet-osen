@@ -21,24 +21,34 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
   const scrollPositionRef = useRef(0);
   const velocityRef = useRef(speed);
   const [isDragging, setIsDragging] = useState(false);
-  const [isTouching, setIsTouching] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const dragStartRef = useRef({ x: 0, scrollLeft: 0 });
-  const touchStartRef = useRef({ x: 0, scrollLeft: 0 });
 
+  // Detect mobile on mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Auto-scroll only on desktop
   useEffect(() => {
     const container = scrollContainerRef.current;
-    if (!container) return;
+    if (!container || isMobile) return; // Skip auto-scroll on mobile
 
     const maxSpeed = speed;
-    const isMobile = window.innerWidth < 768;
-    const itemWidth = (isMobile ? 300 : 450) + 20; // gap of 20px
+    const itemWidth = 450 + 20; // gap of 20px
     const totalItems = images.length;
     const resetPoint = itemWidth * totalItems;
 
     scrollPositionRef.current = container.scrollLeft;
 
     const scroll = () => {
-      if (container && !isDragging && !isTouching) {
+      if (container && !isDragging) {
         velocityRef.current = maxSpeed;
 
         if (velocityRef.current > 0.01) {
@@ -58,11 +68,11 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
     const animationFrame = setInterval(scroll, 16);
 
     return () => clearInterval(animationFrame);
-  }, [images.length, speed, isDragging, isTouching]);
+  }, [images.length, speed, isDragging, isMobile]);
 
-  // Handle document-level mouse events for smooth dragging
+  // Handle document-level mouse events for smooth dragging (desktop only)
   useEffect(() => {
-    if (!isDragging) return;
+    if (!isDragging || isMobile) return;
 
     const handleMouseMove = (e: MouseEvent) => {
       const container = scrollContainerRef.current;
@@ -90,9 +100,11 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging]);
+  }, [isDragging, isMobile]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    if (isMobile) return; // Don't handle mouse events on mobile
+    
     const container = scrollContainerRef.current;
     if (!container) return;
     
@@ -106,9 +118,7 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
   };
 
   const handleMouseLeave = () => {
-    // Only stop dragging if mouse leaves while not actively dragging
-    // This prevents stopping drag when mouse briefly leaves during drag
-    if (isDragging) return;
+    if (isMobile || isDragging) return;
     
     const container = scrollContainerRef.current;
     if (container) {
@@ -116,42 +126,47 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
     }
   };
 
-  // Handle touch events for mobile
-  const handleTouchStart = (e: React.TouchEvent) => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-    
-    setIsTouching(true);
-    touchStartRef.current = {
-      x: e.touches[0].pageX - container.offsetLeft,
-      scrollLeft: container.scrollLeft
-    };
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isTouching) return;
-    
-    const container = scrollContainerRef.current;
-    if (!container) return;
-    
-    const x = e.touches[0].pageX - container.offsetLeft;
-    const walk = (x - touchStartRef.current.x) * 2;
-    container.scrollLeft = touchStartRef.current.scrollLeft - walk;
-    scrollPositionRef.current = container.scrollLeft;
-  };
-
-  const handleTouchEnd = () => {
-    setIsTouching(false);
-  };
-
   const renderItems = () => {
+    // On mobile, render single set with snap points (like MobileImageCarousel)
+    // On desktop, render duplicate set for seamless auto-scroll loop
+    if (isMobile) {
+      return (
+        <>
+          {images.map((image, index) => (
+            <motion.div
+              key={index}
+              className="flex-shrink-0 w-[85%] snap-center"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{
+                duration: 0.6,
+                delay: index * 0.1,
+                ease: "easeOut"
+              }}
+            >
+              <div className="relative w-full aspect-[2/3] overflow-hidden">
+                <Image
+                  src={image.image}
+                  alt={image.name}
+                  fill
+                  className="object-cover pointer-events-none"
+                  sizes="(max-width: 768px) 85vw, 450px"
+                />
+              </div>
+            </motion.div>
+          ))}
+        </>
+      );
+    }
+
+    // Desktop: duplicate set for seamless loop
     return (
       <>
         {/* First set */}
         {images.map((image, index) => (
           <motion.div
             key={`first-${index}`}
-            className="flex-shrink-0 w-[300px] md:w-[450px]"
+            className="flex-shrink-0 w-[450px]"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{
@@ -166,7 +181,7 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
                 alt={image.name}
                 fill
                 className="object-cover pointer-events-none"
-                sizes="(max-width: 768px) 300px, 450px"
+                sizes="450px"
               />
             </div>
           </motion.div>
@@ -175,7 +190,7 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
         {images.map((image, index) => (
           <motion.div
             key={`second-${index}`}
-            className="flex-shrink-0 w-[300px] md:w-[450px]"
+            className="flex-shrink-0 w-[450px]"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{
@@ -190,7 +205,7 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
                 alt={image.name}
                 fill
                 className="object-cover pointer-events-none"
-                sizes="(max-width: 768px) 300px, 450px"
+                sizes="450px"
               />
             </div>
           </motion.div>
@@ -202,15 +217,17 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
   return (
     <div 
       ref={scrollContainerRef}
-      className="w-full overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing select-none touch-pan-x"
+      className={`w-full overflow-x-auto scrollbar-hide ${
+        isMobile 
+          ? 'snap-x snap-mandatory' // Native CSS scroll snapping on mobile
+          : 'cursor-grab active:cursor-grabbing select-none' // Mouse drag on desktop
+      }`}
+      style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       onMouseDown={handleMouseDown}
       onMouseLeave={handleMouseLeave}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
     >
       <motion.div 
-        className="flex gap-5" 
+        className={`flex ${isMobile ? 'gap-3' : 'gap-5'}`}
         style={{ minWidth: 'max-content' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
