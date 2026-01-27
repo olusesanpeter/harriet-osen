@@ -100,6 +100,35 @@ export default function Shoes() {
     return () => window.removeEventListener('popstate', checkHash);
   }, []);
 
+  // Update page title and og:image when modal opens/closes
+  useEffect(() => {
+    const defaultTitle = 'Harriet Osen';
+    const defaultImage = '/images/og-image.jpg';
+
+    if (modalProductIndex !== null) {
+      const product = products[modalProductIndex];
+      document.title = `${product.name} - Harriet Osen`;
+
+      // Update og:image meta tag
+      let ogImage = document.querySelector('meta[property="og:image"]') as HTMLMetaElement;
+      if (ogImage) {
+        ogImage.content = product.galleryImages[0].src;
+      }
+    } else {
+      document.title = defaultTitle;
+
+      // Reset og:image
+      let ogImage = document.querySelector('meta[property="og:image"]') as HTMLMetaElement;
+      if (ogImage) {
+        ogImage.content = defaultImage;
+      }
+    }
+
+    return () => {
+      document.title = defaultTitle;
+    };
+  }, [modalProductIndex]);
+
   const openModal = useCallback((index: number) => {
     setModalProductIndex(index);
     window.history.pushState(null, '', `${pathname}#${products[index].slug}`);
