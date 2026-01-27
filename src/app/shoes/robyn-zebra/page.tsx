@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getProductBySlug } from '@/data/products';
+import { siteConfig } from '@/config/site';
 import { notFound } from 'next/navigation';
 import NotifyForm from '@/components/forms/NotifyForm';
 
@@ -13,7 +14,19 @@ export const metadata: Metadata = {
   openGraph: {
     title: `${product?.name} - Harriet Osen`,
     description: product?.description,
-    images: [{ url: product?.galleryImages[0].src || '' }],
+    siteName: siteConfig.name,
+    images: [{
+      url: `${siteConfig.url}${product?.galleryImages[0].src}`,
+      width: 1200,
+      height: 1800,
+      alt: product?.name,
+    }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `${product?.name} - Harriet Osen`,
+    description: product?.description,
+    images: [`${siteConfig.url}${product?.galleryImages[0].src}`],
   },
 };
 
