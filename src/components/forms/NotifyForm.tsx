@@ -8,7 +8,10 @@ interface NotifyFormProps {
 }
 
 export default function NotifyForm({ productName, productSlug }: NotifyFormProps) {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [newsletter, setNewsletter] = useState(false);
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
@@ -25,7 +28,7 @@ export default function NotifyForm({ productName, productSlug }: NotifyFormProps
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, productName, productSlug }),
+        body: JSON.stringify({ firstName, lastName, email, productName, productSlug, newsletter }),
       });
 
       const result = await response.json();
@@ -86,6 +89,26 @@ export default function NotifyForm({ productName, productSlug }: NotifyFormProps
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex flex-col gap-3">
+          <div className="flex gap-3">
+            <input
+              type="text"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              placeholder="First name"
+              required
+              disabled={status === "loading"}
+              className="w-full px-4 py-3 bg-white border border-black/20 text-black placeholder:text-black/40 focus:outline-none focus:border-brand-red transition-colors rounded-full"
+            />
+            <input
+              type="text"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              placeholder="Last name"
+              required
+              disabled={status === "loading"}
+              className="w-full px-4 py-3 bg-white border border-black/20 text-black placeholder:text-black/40 focus:outline-none focus:border-brand-red transition-colors rounded-full"
+            />
+          </div>
           <input
             type="email"
             value={email}
@@ -95,6 +118,16 @@ export default function NotifyForm({ productName, productSlug }: NotifyFormProps
             disabled={status === "loading"}
             className="w-full px-4 py-3 bg-white border border-black/20 text-black placeholder:text-black/40 focus:outline-none focus:border-brand-red transition-colors rounded-full"
           />
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={newsletter}
+              onChange={(e) => setNewsletter(e.target.checked)}
+              disabled={status === "loading"}
+              className="w-5 h-5 rounded border-black/20 text-brand-red focus:ring-brand-red focus:ring-offset-2"
+            />
+            <span className="text-black/70">Subscribe to our newsletter for updates</span>
+          </label>
           <button
             type="submit"
             disabled={status === "loading"}

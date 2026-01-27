@@ -1,71 +1,15 @@
 'use client'
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from 'framer-motion'
-import { useRef, useState, useEffect, useCallback } from 'react'
-import { usePathname } from 'next/navigation'
-import ImageGalleryModal from '@/components/ImageGalleryModal'
-import MobileImageCarousel from '@/components/MobileImageCarousel'
+import { useRef, useState, useEffect } from 'react'
 import { products } from '@/data/products'
 
 export default function Shoes() {
   const [selectedIndices, setSelectedIndices] = useState<Set<number>>(new Set([0]));
   const [mostRecentActiveIndex, setMostRecentActiveIndex] = useState(0);
-  const [modalProductIndex, setModalProductIndex] = useState<number | null>(null);
   const textRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const pathname = usePathname();
-
-  // Sync modal state with URL hash
-  useEffect(() => {
-    const checkHash = () => {
-      const hash = window.location.hash.slice(1);
-      const productIndex = products.findIndex(p => p.slug === hash);
-      setModalProductIndex(productIndex >= 0 ? productIndex : null);
-    };
-
-    checkHash();
-    window.addEventListener('popstate', checkHash);
-    return () => window.removeEventListener('popstate', checkHash);
-  }, []);
-
-  // Update page title and og:image when modal opens/closes
-  useEffect(() => {
-    const defaultTitle = 'Harriet Osen';
-    const defaultImage = '/images/og-image.jpg';
-
-    if (modalProductIndex !== null) {
-      const product = products[modalProductIndex];
-      document.title = `${product.name} - Harriet Osen`;
-
-      // Update og:image meta tag
-      let ogImage = document.querySelector('meta[property="og:image"]') as HTMLMetaElement;
-      if (ogImage) {
-        ogImage.content = product.galleryImages[0].src;
-      }
-    } else {
-      document.title = defaultTitle;
-
-      // Reset og:image
-      let ogImage = document.querySelector('meta[property="og:image"]') as HTMLMetaElement;
-      if (ogImage) {
-        ogImage.content = defaultImage;
-      }
-    }
-
-    return () => {
-      document.title = defaultTitle;
-    };
-  }, [modalProductIndex]);
-
-  const openModal = useCallback((index: number) => {
-    setModalProductIndex(index);
-    window.history.pushState(null, '', `${pathname}#${products[index].slug}`);
-  }, [pathname]);
-
-  const closeModal = useCallback(() => {
-    setModalProductIndex(null);
-    window.history.pushState(null, '', pathname);
-  }, [pathname]);
 
   // Use IntersectionObserver to track which text sections are in view and add them to selection
   useEffect(() => {
@@ -161,16 +105,16 @@ export default function Shoes() {
                           height={product.galleryImages[0].height}
                           className="max-h-full w-auto object-contain"
                         />
-                        {/* Clickable button overlay - positioned within the image (desktop only) */}
+                        {/* Learn more link - positioned within the image (desktop only) */}
                         {isMostRecent && (
-                          <button
-                            onClick={() => openModal(index)}
+                          <Link
+                            href={`/shoes/${product.slug}`}
                             className="absolute bottom-4 left-1/2 -translate-x-1/2 hidden md:flex items-center gap-3 bg-black/80 backdrop-blur-sm rounded-full px-4 py-3 z-10 hover:bg-black/90 transition-colors shadow-lg"
                           >
                             <span className="text-white text-sm font-medium">
-                              View more images
+                              Learn more
                             </span>
-                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
                               <svg
                                 className="w-4 h-4 text-white"
                                 fill="none"
@@ -181,11 +125,11 @@ export default function Shoes() {
                                   strokeLinecap="round"
                                   strokeLinejoin="round"
                                   strokeWidth={2}
-                                  d="M12 4v16m8-8H4"
+                                  d="M9 5l7 7-7 7"
                                 />
                               </svg>
                             </div>
-                          </button>
+                          </Link>
                         )}
                       </div>
                     </div>
@@ -229,12 +173,36 @@ export default function Shoes() {
                   <p className="font-sans font-normal [word-spacing:0.05em] text-base md:text-lg leading-relaxed text-black/90">
                     {product.description}
                   </p>
-                  {/* Mobile Image Carousel */}
-                  <div className="md:hidden">
-                    <MobileImageCarousel
-                      images={product.galleryImages}
-                      productName={product.name}
-                    />
+                  {/* Mobile Image with Learn More */}
+                  <div className="md:hidden mt-4">
+                    <div className="relative aspect-[4/5] bg-[#EFE5D8] overflow-hidden">
+                      <Image
+                        src={product.galleryImages[0].src}
+                        alt={product.galleryImages[0].alt}
+                        fill
+                        className="object-cover"
+                        sizes="100vw"
+                      />
+                    </div>
+                    <Link
+                      href={`/shoes/${product.slug}`}
+                      className="mt-4 inline-flex items-center gap-2 text-brand-red font-medium hover:underline"
+                    >
+                      Learn more
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </Link>
                   </div>
                 </motion.div>
               );
@@ -243,14 +211,6 @@ export default function Shoes() {
         </div>
       </div>
 
-      {/* Image Gallery Modal */}
-      <ImageGalleryModal
-        isOpen={modalProductIndex !== null}
-        onClose={closeModal}
-        productName={modalProductIndex !== null ? products[modalProductIndex].name : ''}
-        images={modalProductIndex !== null ? products[modalProductIndex].galleryImages : []}
-        initialIndex={0}
-      />
     </section>
   );
 }

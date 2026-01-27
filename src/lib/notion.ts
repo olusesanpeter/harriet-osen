@@ -50,9 +50,12 @@ export interface NewsletterData {
 }
 
 export interface ProductNotifyData {
+  firstName: string;
+  lastName: string;
   email: string;
   productName: string;
   productSlug: string;
+  newsletter: boolean;
 }
 
 export interface NotionResponse {
@@ -245,7 +248,7 @@ export async function addProductNotifyToNotion(
             title: [
               {
                 text: {
-                  content: `Notify: ${data.productName}`,
+                  content: `${data.firstName} ${data.lastName}`,
                 },
               },
             ],
@@ -257,7 +260,7 @@ export async function addProductNotifyToNotion(
             multi_select: [{ name: data.productName }],
           },
           Newsletter: {
-            checkbox: false,
+            checkbox: data.newsletter,
           },
           "Submitted On": {
             date: {

@@ -3,7 +3,15 @@ import { addProductNotifyToNotion } from "@/lib/notion";
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, productName, productSlug } = await request.json();
+    const { firstName, lastName, email, productName, productSlug, newsletter } = await request.json();
+
+    // Validate name
+    if (!firstName || !lastName) {
+      return NextResponse.json(
+        { success: false, message: "Please enter your full name" },
+        { status: 400 }
+      );
+    }
 
     // Validate email
     if (!email || !email.includes("@")) {
@@ -24,9 +32,12 @@ export async function POST(request: NextRequest) {
     // Save notification request to Notion
     try {
       await addProductNotifyToNotion({
+        firstName,
+        lastName,
         email,
         productName,
         productSlug,
+        newsletter: newsletter || false,
       });
     } catch (error) {
       console.error("Notion API error:", error);

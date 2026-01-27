@@ -5,7 +5,7 @@ import { getProductBySlug } from '@/data/products';
 import { notFound } from 'next/navigation';
 import NotifyForm from '@/components/forms/NotifyForm';
 
-const product = getProductBySlug('rotterdam-blue');
+const product = getProductBySlug('arua-sandal');
 
 export const metadata: Metadata = {
   title: `${product?.name} - Harriet Osen`,
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RotterdamBluePage() {
+export default function AruaSandalPage() {
   if (!product) {
     notFound();
   }
