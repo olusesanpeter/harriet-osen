@@ -35,13 +35,13 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Auto-scroll only on desktop
+  // Auto-scroll on both desktop and mobile
   useEffect(() => {
     const container = scrollContainerRef.current;
-    if (!container || isMobile) return; // Skip auto-scroll on mobile
+    if (!container) return;
 
     const maxSpeed = speed;
-    const itemWidth = 450 + 20; // gap of 20px
+    const itemWidth = isMobile ? (window.innerWidth * 0.85) + 12 : 450 + 20; // 85% width + gap on mobile, 450px + gap on desktop
     const totalItems = images.length;
     const resetPoint = itemWidth * totalItems;
 
@@ -127,46 +127,17 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
   };
 
   const renderItems = () => {
-    // On mobile, render single set with snap points (like MobileImageCarousel)
-    // On desktop, render duplicate set for seamless auto-scroll loop
-    if (isMobile) {
-      return (
-        <>
-          {images.map((image, index) => (
-            <motion.div
-              key={index}
-              className="flex-shrink-0 w-[85%] snap-center"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{
-                duration: 0.6,
-                delay: index * 0.1,
-                ease: "easeOut"
-              }}
-            >
-              <div className="relative w-full aspect-[2/3] overflow-hidden">
-                <Image
-                  src={image.image}
-                  alt={image.name}
-                  fill
-                  className="object-cover pointer-events-none"
-                  sizes="(max-width: 768px) 85vw, 450px"
-                />
-              </div>
-            </motion.div>
-          ))}
-        </>
-      );
-    }
+    // Both mobile and desktop: duplicate set for seamless auto-scroll loop
+    const itemClass = isMobile ? "flex-shrink-0 w-[85vw]" : "flex-shrink-0 w-[450px]";
+    const sizes = isMobile ? "(max-width: 768px) 85vw, 450px" : "450px";
 
-    // Desktop: duplicate set for seamless loop
     return (
       <>
         {/* First set */}
         {images.map((image, index) => (
           <motion.div
             key={`first-${index}`}
-            className="flex-shrink-0 w-[450px]"
+            className={itemClass}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{
@@ -181,7 +152,7 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
                 alt={image.name}
                 fill
                 className="object-cover pointer-events-none"
-                sizes="450px"
+                sizes={sizes}
               />
             </div>
           </motion.div>
@@ -190,7 +161,7 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
         {images.map((image, index) => (
           <motion.div
             key={`second-${index}`}
-            className="flex-shrink-0 w-[450px]"
+            className={itemClass}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{
@@ -205,7 +176,7 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
                 alt={image.name}
                 fill
                 className="object-cover pointer-events-none"
-                sizes="450px"
+                sizes={sizes}
               />
             </div>
           </motion.div>
@@ -215,18 +186,16 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
   };
 
   return (
-    <div 
+    <div
       ref={scrollContainerRef}
       className={`w-full overflow-x-auto scrollbar-hide ${
-        isMobile 
-          ? 'snap-x snap-mandatory' // Native CSS scroll snapping on mobile
-          : 'cursor-grab active:cursor-grabbing select-none' // Mouse drag on desktop
+        !isMobile && 'cursor-grab active:cursor-grabbing select-none'
       }`}
       style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       onMouseDown={handleMouseDown}
       onMouseLeave={handleMouseLeave}
     >
-      <motion.div 
+      <motion.div
         className={`flex ${isMobile ? 'gap-3' : 'gap-5'}`}
         style={{ minWidth: 'max-content' }}
         initial={{ opacity: 0 }}

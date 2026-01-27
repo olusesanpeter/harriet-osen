@@ -2,13 +2,15 @@
 
 import Image from "next/image";
 import { motion } from 'framer-motion'
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
+import { usePathname } from 'next/navigation'
 import ImageGalleryModal from '@/components/ImageGalleryModal'
 import MobileImageCarousel from '@/components/MobileImageCarousel'
 
 const products = [
   {
     name: "Rotterdam Blue",
+    slug: "rotterdam-blue",
     image: "/images/products/blue-rotterdam.png",
     width: 629,
     height: 943,
@@ -22,6 +24,7 @@ const products = [
   },
   {
     name: "Benni Pump",
+    slug: "benni-pump",
     image: "/images/products/white-rotterdam.png",
     width: 415,
     height: 622,
@@ -35,6 +38,7 @@ const products = [
   },
   {
     name: "Robyn Zebra",
+    slug: "robyn-zebra",
     image: "/images/products/robyn-zebra.png",
     width: 415,
     height: 621,
@@ -48,6 +52,7 @@ const products = [
   },
   {
     name: "Robyn Brown",
+    slug: "robyn-brown",
     image: "/images/products/brown-zebra.png",
     width: 629,
     height: 943,
@@ -62,6 +67,7 @@ const products = [
   },
   {
     name: "Arua Sandal",
+    slug: "arua-sandal",
     image: "/images/products/yellow-brown.png",
     width: 415,
     height: 623,
@@ -77,8 +83,32 @@ const products = [
 export default function Shoes() {
   const [selectedIndices, setSelectedIndices] = useState<Set<number>>(new Set([0]));
   const [mostRecentActiveIndex, setMostRecentActiveIndex] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalProductIndex, setModalProductIndex] = useState<number | null>(null);
   const textRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const pathname = usePathname();
+
+  // Sync modal state with URL hash
+  useEffect(() => {
+    const checkHash = () => {
+      const hash = window.location.hash.slice(1);
+      const productIndex = products.findIndex(p => p.slug === hash);
+      setModalProductIndex(productIndex >= 0 ? productIndex : null);
+    };
+
+    checkHash();
+    window.addEventListener('popstate', checkHash);
+    return () => window.removeEventListener('popstate', checkHash);
+  }, []);
+
+  const openModal = useCallback((index: number) => {
+    setModalProductIndex(index);
+    window.history.pushState(null, '', `${pathname}#${products[index].slug}`);
+  }, [pathname]);
+
+  const closeModal = useCallback(() => {
+    setModalProductIndex(null);
+    window.history.pushState(null, '', pathname);
+  }, [pathname]);
 
   // Use IntersectionObserver to track which text sections are in view and add them to selection
   useEffect(() => {
@@ -140,8 +170,6 @@ export default function Shoes() {
     };
   }, []);
 
-  const activeProduct = products[mostRecentActiveIndex];
-
   return (
     <section id="shoes" className="py-12 md:py-32 bg-[#fff7ed]">
       <div className="w-full px-4 sm:px-6 md:px-12 lg:px-24 mx-auto">
@@ -167,20 +195,20 @@ export default function Shoes() {
                       ease: [0.22, 1, 0.36, 1]
                     }}
                   >
-                    <div className="relative w-full h-full flex items-center justify-center">
-                      <div className="relative w-full h-full max-w-[600px] max-h-[90vh] flex items-center justify-center">
+                    <div className="relative w-full h-full flex items-end justify-center pb-8">
+                      <div className="relative h-[85vh] w-full flex items-end justify-center">
                         <Image
-                          src={product.image}
-                          alt={product.name}
-                          width={product.width}
-                          height={product.height}
-                          className="w-full h-full object-contain"
+                          src={product.galleryImages[0].src}
+                          alt={product.galleryImages[0].alt}
+                          width={product.galleryImages[0].width}
+                          height={product.galleryImages[0].height}
+                          className="max-h-full w-auto object-contain"
                         />
                         {/* Clickable button overlay - positioned within the image (desktop only) */}
                         {isMostRecent && (
                           <button
-                            onClick={() => setIsModalOpen(true)}
-                            className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden md:flex items-center gap-3 bg-black/80 backdrop-blur-sm rounded-full px-4 py-3 z-10 hover:bg-black/90 transition-colors shadow-lg"
+                            onClick={() => openModal(index)}
+                            className="absolute bottom-4 left-1/2 -translate-x-1/2 hidden md:flex items-center gap-3 bg-black/80 backdrop-blur-sm rounded-full px-4 py-3 z-10 hover:bg-black/90 transition-colors shadow-lg"
                           >
                             <span className="text-white text-sm font-medium">
                               View more images
@@ -260,10 +288,10 @@ export default function Shoes() {
 
       {/* Image Gallery Modal */}
       <ImageGalleryModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        productName={activeProduct.name}
-        images={activeProduct.galleryImages}
+        isOpen={modalProductIndex !== null}
+        onClose={closeModal}
+        productName={modalProductIndex !== null ? products[modalProductIndex].name : ''}
+        images={modalProductIndex !== null ? products[modalProductIndex].galleryImages : []}
         initialIndex={0}
       />
     </section>
