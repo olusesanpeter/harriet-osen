@@ -49,6 +49,12 @@ export interface NewsletterData {
   firstName?: string;
 }
 
+export interface ProductNotifyData {
+  email: string;
+  productName: string;
+  productSlug: string;
+}
+
 export interface NotionResponse {
   success: boolean;
   message?: string;
@@ -202,6 +208,81 @@ export async function addFeedbackToNotion(
     return {
       success: true,
       message: "Feedback added to Notion successfully",
+    };
+  } catch (error) {
+    console.error("Notion API error:", error);
+    throw error;
+  }
+}
+
+/**
+ * Adds a product notification request to Notion database
+ */
+export async function addProductNotifyToNotion(
+  data: ProductNotifyData
+): Promise<NotionResponse> {
+  const apiKey = process.env.NOTION_API_KEY?.trim();
+  const databaseId = process.env.NOTION_DATABASE_ID?.trim().replace(/['"]/g, '');
+
+  if (!apiKey || !databaseId) {
+    throw new Error("Notion API credentials not configured");
+  }
+
+  try {
+    const response = await fetch(`https://api.notion.com/v1/pages`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        "Notion-Version": "2022-06-28",
+      },
+      body: JSON.stringify({
+        parent: {
+          database_id: databaseId,
+        },
+        properties: {
+          Name: {
+            title: [
+              {
+                text: {
+                  content: `Notify: ${data.productName}`,
+                },
+              },
+            ],
+          },
+          Email: {
+            email: data.email,
+          },
+          "Selected Shoes": {
+            multi_select: [{ name: data.productName }],
+          },
+          Newsletter: {
+            checkbox: false,
+          },
+          "Submitted On": {
+            date: {
+              start: new Date().toISOString(),
+            },
+          },
+        },
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Notion API error:", {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorData,
+      });
+      throw new Error(
+        errorData.message || `Notion API error: ${response.status} ${response.statusText}`
+      );
+    }
+
+    return {
+      success: true,
+      message: "Product notification added to Notion successfully",
     };
   } catch (error) {
     console.error("Notion API error:", error);
