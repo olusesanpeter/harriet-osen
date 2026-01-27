@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: "Harriet Osen",
+  name: "Harriet Osen - Shoes for Strutting",
   description: "Shoes for Strutting",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://harrietosen.com",
   ogImage: "/images/hero/hero-boots.png",
