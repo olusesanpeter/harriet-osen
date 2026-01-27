@@ -35,13 +35,15 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Auto-scroll on both desktop and mobile
+  // Auto-scroll on desktop only
   useEffect(() => {
+    if (isMobile) return; // No auto-scroll on mobile
+
     const container = scrollContainerRef.current;
     if (!container) return;
 
     const maxSpeed = speed;
-    const itemWidth = isMobile ? (window.innerWidth * 0.85) + 12 : 450 + 20; // 85% width + gap on mobile, 450px + gap on desktop
+    const itemWidth = 450 + 20; // 450px + gap on desktop
     const totalItems = images.length;
     const resetPoint = itemWidth * totalItems;
 
@@ -127,46 +129,24 @@ export default function ImageCarousel({ images, speed = 0.6 }: ImageCarouselProp
   };
 
   const renderItems = () => {
-    // Both mobile and desktop: duplicate set for seamless auto-scroll loop
     const itemClass = isMobile ? "flex-shrink-0 w-[85vw]" : "flex-shrink-0 w-[450px]";
     const sizes = isMobile ? "(max-width: 768px) 85vw, 450px" : "450px";
 
+    // Mobile: single set for manual scrolling
+    // Desktop: duplicate set for seamless auto-scroll loop
+    const itemsToRender = isMobile ? images : [...images, ...images];
+
     return (
       <>
-        {/* First set */}
-        {images.map((image, index) => (
+        {itemsToRender.map((image, index) => (
           <motion.div
-            key={`first-${index}`}
+            key={`item-${index}`}
             className={itemClass}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{
               duration: 0.6,
-              delay: index * 0.1,
-              ease: "easeOut"
-            }}
-          >
-            <div className="relative w-full aspect-[2/3] overflow-hidden">
-              <Image
-                src={image.image}
-                alt={image.name}
-                fill
-                className="object-cover pointer-events-none"
-                sizes={sizes}
-              />
-            </div>
-          </motion.div>
-        ))}
-        {/* Duplicate set for seamless loop */}
-        {images.map((image, index) => (
-          <motion.div
-            key={`second-${index}`}
-            className={itemClass}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{
-              duration: 0.6,
-              delay: (images.length + index) * 0.1,
+              delay: (index % images.length) * 0.1,
               ease: "easeOut"
             }}
           >
